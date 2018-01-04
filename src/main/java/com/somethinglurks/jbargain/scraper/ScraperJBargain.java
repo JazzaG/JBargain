@@ -4,7 +4,7 @@ import com.somethinglurks.jbargain.api.JBargain;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.teaser.Teaser;
-import com.somethinglurks.jbargain.api.user.AuthenticationResult;
+import com.somethinglurks.jbargain.api.user.AuthenticationException;
 import com.somethinglurks.jbargain.api.user.User;
 import com.somethinglurks.jbargain.scraper.node.post.ScraperCompetitionPost;
 import com.somethinglurks.jbargain.scraper.node.post.ScraperDealPost;
@@ -21,17 +21,13 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ScraperJBargain implements JBargain {
 
     private static final String HOST = "https://ozbargain.com.au";
 
     @Override
-    public AuthenticationResult authenticateUser(String username, String password) {
-        AuthenticationResult.Status status = AuthenticationResult.Status.ERROR;
-        User user = null;
-
+    public User authenticateUser(String username, String password) throws AuthenticationException {
         try {
             Connection connection = Jsoup.connect(HOST + "/user/login?destination=front");
 
@@ -39,7 +35,6 @@ public class ScraperJBargain implements JBargain {
             String token = connection.get()
                     .select("input#edit-form_token")
                     .val();
-            Map<String, String> cookies = connection.response().cookies();
 
             // Send login request
             Connection.Response login = connection
@@ -49,22 +44,23 @@ public class ScraperJBargain implements JBargain {
                     .data("edit[form_id]", "user_login")
                     .data("op", "Log in")
                     .method(Connection.Method.POST)
-                    .cookies(cookies)
+                    .cookies(connection.response().cookies())
                     .execute();
 
-            // Verify
+            // Verify that there is no error message
             String text = login.parse().select("div.messages.error").text();
-            if (text.isEmpty()) {
-                status = AuthenticationResult.Status.SUCCESS;
-                user = new ScraperUser(login.cookies());
-            } else if (text.contains("Unrecognised username or password")) {
-                status = AuthenticationResult.Status.INCORRECT_CREDENTIALS;
+
+            if (text.contains("Unrecognised username or password")) {
+                throw new AuthenticationException("Invalid credentials");
+            } else if (!text.isEmpty()) {
+                throw new AuthenticationException(text);
+            } else {
+                return new ScraperUser(login.cookies());
             }
+
         } catch (IOException ignored) {
-
+            throw new AuthenticationException(ignored.getMessage());
         }
-
-        return new AuthenticationResult(status, user);
     }
 
     @Override

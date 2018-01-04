@@ -3,7 +3,7 @@ package com.somethinglurks.jbargain.api;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.teaser.Teaser;
-import com.somethinglurks.jbargain.api.user.AuthenticationResult;
+import com.somethinglurks.jbargain.api.user.AuthenticationException;
 import com.somethinglurks.jbargain.api.user.User;
 
 import java.io.IOException;
@@ -19,9 +19,10 @@ public interface JBargain {
      *
      * @param username Username
      * @param password Password
-     * @return Result object, which contains the result of authentication and the user, if any
+     * @return Authenticated User object
+     * @throws AuthenticationException if something goes wrong during authentication
      */
-    AuthenticationResult authenticateUser(String username, String password);
+    User authenticateUser(String username, String password) throws AuthenticationException;
 
     /**
      * Gets a post by its identifier
