@@ -5,24 +5,17 @@ import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.Date;
 
 public class CommentElementAdapter extends Comment {
 
     private Element comment;
-    private Elements children;
-
-    private int level;
 
     public CommentElementAdapter(Element element, int level) {
         super(null, null, null, null, 0, level);
 
         this.comment = element.select("div.comment-wrap").first();
-        this.children = element.select("> ul.comment");
-
-        this.level = level;
     }
 
     @Override
