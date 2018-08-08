@@ -6,7 +6,7 @@ import com.somethinglurks.jbargain.api.user.Person;
 import java.util.List;
 
 /**
- * Represents an author of a post
+ * Represents an author of content
  */
 public class Author implements Person, Flaggable {
 

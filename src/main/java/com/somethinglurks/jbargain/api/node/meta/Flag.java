@@ -1,5 +1,8 @@
 package com.somethinglurks.jbargain.api.node.meta;
 
+/**
+ * Represents a type of flag on a post, author, or comment
+ */
 public enum Flag {
 
     AUTHOR_LEARNER,

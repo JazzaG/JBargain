@@ -56,6 +56,9 @@ public interface User extends Person {
      */
     boolean vote(Comment comment, Vote vote);
 
+    /**
+     * Represents a vote value
+     */
     enum Vote {
         POSITIVE("1"),
         NEGATIVE("-1");
