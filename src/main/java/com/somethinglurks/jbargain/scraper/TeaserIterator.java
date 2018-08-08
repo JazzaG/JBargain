@@ -22,6 +22,7 @@ public class TeaserIterator implements Iterator<List<Teaser>> {
 
     private Element currentPageElement;
     private int currentPageIndex = 0;
+    private boolean firstRun = true;
 
     public TeaserIterator(String endpoint, ScraperUser user) {
         this.endpoint = endpoint;
@@ -29,6 +30,8 @@ public class TeaserIterator implements Iterator<List<Teaser>> {
     }
 
     private void loadPage() {
+        firstRun = false;
+
         try {
             String host = "https://ozbargain.com.au" + endpoint + "?page=" + currentPageIndex++;
             Connection connection = Jsoup.connect(host);
@@ -45,8 +48,9 @@ public class TeaserIterator implements Iterator<List<Teaser>> {
 
     @Override
     public boolean hasNext() {
-        // Check if current page element can go to next page
-        return currentPageElement.select("a.page-next.active").size() == 1;
+        // Check if current page element can go to next page, or if this is the first run
+        return firstRun || (currentPageElement != null
+                && currentPageElement.select("a.pager-next.active > i.fa.fa-chevron-right").size() == 1);
     }
 
     @Override

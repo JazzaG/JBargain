@@ -1,6 +1,8 @@
 package com.somethinglurks.jbargain.api.node.teaser;
 
-public interface Teaser {
+import com.somethinglurks.jbargain.api.node.Node;
+
+public interface Teaser extends Node {
 
     int getNumberOfComments();
 

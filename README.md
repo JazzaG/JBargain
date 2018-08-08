@@ -18,6 +18,22 @@ post.getTitle(); // 20% Off Everything in Stock at Kooring, 1-4 November
 post.getAuthor().getUsername(); // scotty
 ```
 
+### Retrieve popular deals
+```java
+JBargain api = new ScraperJBargain();
+
+// It is currently up to you how you manage tags
+Tag tag = new Tag("Popular Deals", "/deals/popular");
+
+Iterator<List<Teaser>> teasers = api.getFeedByTag(tag);
+while(teasers.hasNext()) {
+    for (Teaser teaser : teasers.next()) {
+        teaser.getTitle();
+    }
+}
+
+```
+
 ### Authenticate a User
 ```java
 JBargain api = new ScraperJBargain();
