@@ -7,6 +7,7 @@ import com.somethinglurks.jbargain.api.user.AuthenticationException;
 import com.somethinglurks.jbargain.api.user.User;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -28,21 +29,38 @@ public interface JBargain {
      * Gets a post by its identifier
      *
      * @param id Identifier
-     * @param user User, if available
+     * @param user User
      * @return Post object
      * @throws IOException if anything goes wrong
      */
     Post getPostById(String id, User user) throws IOException;
 
     /**
+     * Gets a post by its identifier
+     *
+     * @param id Identifier
+     * @return Post object
+     * @throws IOException if anything goes wrong
+     */
+    Post getPostById(String id) throws IOException;
+
+    /**
      * Gets a list of teasers by tag
      *
      * @param tag Tag
-     * @param user User, if available
-     * @param page Page number to search
+     * @param user User
      * @return List of teasers
      * @throws IOException if anything goes wrong
      */
-    List<Teaser> getFeedByTag(Tag tag, User user, int page) throws IOException;
+    Iterator<List<Teaser>> getFeedByTag(Tag tag, User user) throws IOException;
+
+    /**
+     * Gets a list of teasers by tag
+     *
+     * @param tag Tag
+     * @return List of teasers
+     * @throws IOException if anything goes wrong
+     */
+    Iterator<List<Teaser>> getFeedByTag(Tag tag) throws IOException;
 
 }

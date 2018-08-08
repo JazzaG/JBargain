@@ -5,8 +5,8 @@ import com.somethinglurks.jbargain.api.node.meta.Flag;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
-import com.somethinglurks.jbargain.scraper.node.meta.FlagListFactory;
-import com.somethinglurks.jbargain.scraper.node.post.comment.ElementCommentIterator;
+import com.somethinglurks.jbargain.scraper.node.meta.Flags;
+import com.somethinglurks.jbargain.scraper.node.post.comment.CommentElementIterator;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
@@ -21,11 +21,11 @@ public class ScraperPost implements Post {
 
     protected Element element;
 
-    private ElementCommentIterator commentIterator;
+    private CommentElementIterator commentIterator;
 
     ScraperPost(Element element, ScraperUser user) {
         this.element = element;
-        this.commentIterator = new ElementCommentIterator(user, getId(), element);
+        this.commentIterator = new CommentElementIterator(user, getId(), element);
     }
 
     @Override
@@ -49,10 +49,10 @@ public class ScraperPost implements Post {
     @Override
     public Author getAuthor() {
         return new Author(
-                element.select("div.submitted a").attr("href").replaceAll("[^0-9]", ""),
-                element.select("div.submitted a").text(),
+                element.select("div.submitted a").first().attr("href").replaceAll("[^0-9]", ""),
+                element.select("div.submitted a").first().text(),
                 element.select("div.n-left img.gravatar").attr("src"),
-                FlagListFactory.createFromElements(element.select("div.submitted span"))
+                Flags.createFromElements(element.select("div.submitted span"))
         );
     }
 
@@ -76,6 +76,6 @@ public class ScraperPost implements Post {
 
     @Override
     public List<Flag> getFlags() {
-        return FlagListFactory.createFromElements(element.select("h1.title span"));
+        return Flags.createFromElements(element.select("h1.title span"));
     }
 }

@@ -1,9 +1,9 @@
-package com.somethinglurks.jbargain.api.user.actor;
+package com.somethinglurks.jbargain.api.user;
 
 /**
  * Represents a person
  */
-public interface Actor {
+public interface Person {
 
     /**
      * Gets the identifier

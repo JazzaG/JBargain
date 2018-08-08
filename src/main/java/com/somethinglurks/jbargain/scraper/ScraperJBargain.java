@@ -9,17 +9,14 @@ import com.somethinglurks.jbargain.api.user.User;
 import com.somethinglurks.jbargain.scraper.node.post.ScraperCompetitionPost;
 import com.somethinglurks.jbargain.scraper.node.post.ScraperDealPost;
 import com.somethinglurks.jbargain.scraper.node.post.ScraperForumPost;
-import com.somethinglurks.jbargain.scraper.node.teaser.ScraperCompetitionTeaser;
-import com.somethinglurks.jbargain.scraper.node.teaser.ScraperDealTeaser;
-import com.somethinglurks.jbargain.scraper.node.teaser.ScraperForumTeaser;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import org.jsoup.Connection;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ScraperJBargain implements JBargain {
@@ -50,6 +47,7 @@ public class ScraperJBargain implements JBargain {
             // Verify that there is no error message
             String text = login.parse().select("div.messages.error").text();
 
+            // Return authenticated user object if no errors exist
             if (text.contains("Unrecognised username or password")) {
                 throw new AuthenticationException("Invalid credentials");
             } else if (!text.isEmpty()) {
@@ -65,70 +63,48 @@ public class ScraperJBargain implements JBargain {
 
     @Override
     public Post getPostById(String id, User user) throws IOException {
-        // Download the page
-        Element element = Jsoup.connect(HOST + "/node/" + id).get();
+        try {
+            // Download the page
+            Element element = Jsoup.connect(HOST + "/node/" + id).get();
 
-        /* Determine what type of node this is */
-        Element post = element.select("div.node").first();
+            /* Determine what type of node this is */
+            Element post = element.select("div.node").first();
 
-        // Deal node
-        if (post.hasClass("node-ozbdeal")) {
-            return new ScraperDealPost(element, (ScraperUser) user);
-        }
+            // Deal node
+            if (post.hasClass("node-ozbdeal")) {
+                return new ScraperDealPost(element, (ScraperUser) user);
+            }
 
-        // Forum node
-        if (post.hasClass("node-forum")) {
-            return new ScraperForumPost(element, (ScraperUser) user);
-        }
+            // Forum node
+            if (post.hasClass("node-forum")) {
+                return new ScraperForumPost(element, (ScraperUser) user);
+            }
 
-        // Competition node
-        if (post.hasClass("node-competition")) {
-            return new ScraperCompetitionPost(element, (ScraperUser) user);
+            // Competition node
+            if (post.hasClass("node-competition")) {
+                return new ScraperCompetitionPost(element, (ScraperUser) user);
+            }
+        } catch (HttpStatusException ignored) {
+
         }
 
         throw new IllegalArgumentException("No such node with id " + id);
     }
 
     @Override
-    public List<Teaser> getFeedByTag(Tag tag, User user, int page) throws IOException {
-        Connection connection = Jsoup.connect(HOST + tag.getEndpoint() + "?page=" + page);
-
-        // Append user cookies if logged in
-        if (user != null) {
-            connection.cookies(((ScraperUser) user).getCookies());
-        }
-
-        return getFeed(connection.get());
+    public Post getPostById(String id) throws IOException {
+        return getPostById(id, null);
     }
 
-    private List<Teaser> getFeed(Element pageElement) {
-        List<Teaser> nodes = new ArrayList<>();
-
-        // Determine type
-        Elements elements;
-
-        // Deals
-        if ((elements = pageElement.select("div.node-ozbdeal[class^=node]")).size() > 0) {
-            for (Element element : elements) {
-                nodes.add(new ScraperDealTeaser(element));
-            }
-        }
-
-        // Forum
-        if ((elements = pageElement.select("table.forum-topics tbody tr")).size() > 0) {
-            for (Element element : elements) {
-                nodes.add(new ScraperForumTeaser(element));
-            }
-        }
-
-        // Competitions
-        if ((elements = pageElement.select("div.node-competition[class^=node]")).size() > 0) {
-            for (Element element : elements) {
-                nodes.add(new ScraperCompetitionTeaser(element));
-            }
-        }
-
-        return nodes;
+    @Override
+    public Iterator<List<Teaser>> getFeedByTag(Tag tag) throws IOException {
+        return new TeaserIterator(tag.getEndpoint(), null);
     }
+
+    @Override
+    public Iterator<List<Teaser>> getFeedByTag(Tag tag, User user) throws IOException {
+        return new TeaserIterator(tag.getEndpoint(), (ScraperUser) user);
+    }
+
 
 }

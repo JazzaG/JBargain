@@ -5,7 +5,7 @@ import com.somethinglurks.jbargain.api.node.meta.Flag;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.teaser.DealTeaser;
 import com.somethinglurks.jbargain.scraper.node.DealDateWrapper;
-import com.somethinglurks.jbargain.scraper.node.meta.FlagListFactory;
+import com.somethinglurks.jbargain.scraper.node.meta.Flags;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
 
@@ -47,7 +47,7 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
                 element.select("div.submitted strong a").attr("href").replaceAll("[^0-9]", ""),
                 element.select("div.submitted strong a").text(),
                 element.select("div.n-left img.gravatar").attr("src"),
-                FlagListFactory.createFromElements(element.select("div.submitted span"))
+                Flags.createFromElements(element.select("div.submitted span"))
         );
     }
 
@@ -65,7 +65,7 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
 
     @Override
     public List<Flag> getFlags() {
-        return FlagListFactory.createFromElements(element.select("h2.title span"));
+        return Flags.createFromElements(element.select("h2.title span"));
     }
 
     @Override

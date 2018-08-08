@@ -2,7 +2,6 @@ package com.somethinglurks.jbargain.api.user;
 
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
-import com.somethinglurks.jbargain.api.user.actor.Actor;
 import com.somethinglurks.jbargain.api.user.notification.Notification;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * Represents an authenticated user
  */
-public interface User extends Actor {
+public interface User extends Person {
 
     /**
      * Gets a list of notifications at the current time
@@ -43,18 +42,29 @@ public interface User extends Actor {
      * Adds a vote to a post
      *
      * @param post Post to vote on
-     * @param up Flag to indicate if vote is positive
+     * @param vote Vote value
      * @return True on success, false otherwise
      */
-    boolean vote(Post post, boolean up);
+    boolean vote(Post post, Vote vote);
 
     /**
      * Adds a vote to a comment
      *
      * @param comment Comment to vote on
-     * @param up Flag to indicate if vote is positive
+     * @param vote Vote value
      * @return True on success, false otherwise
      */
-    boolean vote(Comment comment, boolean up);
+    boolean vote(Comment comment, Vote vote);
+
+    enum Vote {
+        POSITIVE("1"),
+        NEGATIVE("-1");
+
+        public String value;
+
+        Vote(String value) {
+            this.value = value;
+        }
+    }
 
 }

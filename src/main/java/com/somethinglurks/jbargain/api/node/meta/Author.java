@@ -1,14 +1,14 @@
 package com.somethinglurks.jbargain.api.node.meta;
 
 import com.somethinglurks.jbargain.api.node.meta.attribute.Flaggable;
-import com.somethinglurks.jbargain.api.user.actor.Actor;
+import com.somethinglurks.jbargain.api.user.Person;
 
 import java.util.List;
 
 /**
  * Represents an author of a post
  */
-public class Author implements Actor, Flaggable {
+public class Author implements Person, Flaggable {
 
     private String id;
     private String username;

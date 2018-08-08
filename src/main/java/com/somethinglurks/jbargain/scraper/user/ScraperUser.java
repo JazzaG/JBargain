@@ -6,7 +6,6 @@ import com.somethinglurks.jbargain.api.user.User;
 import com.somethinglurks.jbargain.api.user.notification.Notification;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
@@ -102,11 +101,11 @@ public class ScraperUser implements User {
     }
 
     @Override
-    public boolean vote(Post post, boolean up) {
+    public boolean vote(Post post, Vote vote) {
         try {
             String data = String.format("{ \"version\": \"1.0\", \"method\": \"node_vote\", \"params\": [%s, %s, false] }",
                     post.getId(),
-                    up ? "1" : "-1");
+                    vote.value);
 
             Connection.Response response = Jsoup.connect("https://www.ozbargain.com.au/api/rpc")
                     .requestBody(data)
@@ -129,7 +128,7 @@ public class ScraperUser implements User {
     }
 
     @Override
-    public boolean vote(Comment comment, boolean up) {
+    public boolean vote(Comment comment, Vote vote) {
         return false;
     }
 }

@@ -7,9 +7,9 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlagListFactory {
+public class Flags {
 
-    private FlagListFactory() {
+    private Flags() {
     }
 
     public static List<Flag> createFromElements(Elements elements) {
