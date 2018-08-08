@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ScraperJBargain implements JBargain {
 
-    private static final String HOST = "https://ozbargain.com.au";
+    public static final String HOST = "https://ozbargain.com.au";
 
     @Override
     public User authenticateUser(String username, String password) throws AuthenticationException {

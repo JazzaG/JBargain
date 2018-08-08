@@ -33,7 +33,7 @@ public class TeaserIterator implements Iterator<List<Teaser>> {
         firstRun = false;
 
         try {
-            String host = "https://ozbargain.com.au" + endpoint + "?page=" + currentPageIndex++;
+            String host = ScraperJBargain.HOST + endpoint + "?page=" + currentPageIndex++;
             Connection connection = Jsoup.connect(host);
 
             if (user != null) {

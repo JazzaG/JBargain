@@ -1,6 +1,7 @@
 package com.somethinglurks.jbargain.scraper.node.post.comment;
 
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
+import com.somethinglurks.jbargain.scraper.ScraperJBargain;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -37,11 +38,11 @@ public class CommentElementIterator implements Iterator<List<Comment>> {
     private void fetchComments() {
         try {
             if (user != null) {
-                element = Jsoup.connect("https://ozbargain.com.au/node/" + id + "/comments")
+                element = Jsoup.connect(ScraperJBargain.HOST + "/node/" + id + "/comments")
                         .cookies(user.getCookies())
                         .get();
             } else {
-                element = Jsoup.connect("https://ozbargain.com.au/node/" + id + "?page=" + currentPage++).get();
+                element = Jsoup.connect(ScraperJBargain.HOST + "/node/" + id + "?page=" + currentPage++).get();
             }
         } catch (IOException ignored) {
 

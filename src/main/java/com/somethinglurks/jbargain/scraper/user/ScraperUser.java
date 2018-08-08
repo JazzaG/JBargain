@@ -4,6 +4,7 @@ import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.api.user.User;
 import com.somethinglurks.jbargain.api.user.notification.Notification;
+import com.somethinglurks.jbargain.scraper.ScraperJBargain;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -24,7 +25,7 @@ public class ScraperUser implements User {
         this.cookies = cookies;
 
         // Load user details
-        Element element = Jsoup.connect("https://ozbargain.com.au/user")
+        Element element = Jsoup.connect(ScraperJBargain.HOST + "/user")
                 .cookies(this.cookies)
                 .method(Connection.Method.GET)
                 .execute()
@@ -69,7 +70,7 @@ public class ScraperUser implements User {
         try {
             // Load reply form
             Connection connection = Jsoup
-                    .connect("https://ozbargain.com.au/ozbapi/comment/" + comment.getId() + "/replyform")
+                    .connect(ScraperJBargain.HOST + "/ozbapi/comment/" + comment.getId() + "/replyform")
                     .cookies(this.cookies)
                     .method(Connection.Method.GET);
 
@@ -107,7 +108,7 @@ public class ScraperUser implements User {
                     post.getId(),
                     vote.value);
 
-            Connection.Response response = Jsoup.connect("https://www.ozbargain.com.au/api/rpc")
+            Connection.Response response = Jsoup.connect(ScraperJBargain.HOST + "/api/rpc")
                     .requestBody(data)
                     .header("Content-Type", "application/json")
                     .header("Accept", "application/json")
