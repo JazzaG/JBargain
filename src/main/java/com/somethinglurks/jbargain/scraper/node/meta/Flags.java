@@ -15,9 +15,10 @@ public class Flags {
     public static List<Flag> createFromElements(Elements elements) {
         List<Flag> flags = new ArrayList<>();
 
+        // Build flag list by matching from each element
         Flag flag;
         for (Element element : elements) {
-            flag = Flag.getFlagByClass(element.className(), element.text());
+            flag = FlagElementMatcher.matchFromElement(element);
 
             if (flag != null) {
                 flags.add(flag);
