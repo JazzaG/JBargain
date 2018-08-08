@@ -90,7 +90,7 @@ public class ScraperUser implements User {
                     .data("edit[form_id]", "comment_form")
                     .data("op", "Post comment")
                     .method(Connection.Method.POST)
-                    .url("https://ozbargain.com.au" + endpoint)
+                    .url(ScraperJBargain.HOST + endpoint)
                     .execute();
 
             // Validate
