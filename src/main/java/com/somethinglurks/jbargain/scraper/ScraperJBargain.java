@@ -4,8 +4,8 @@ import com.somethinglurks.jbargain.api.JBargain;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.teaser.Teaser;
-import com.somethinglurks.jbargain.api.user.AuthenticationException;
 import com.somethinglurks.jbargain.api.user.User;
+import com.somethinglurks.jbargain.api.user.exception.AuthenticationException;
 import com.somethinglurks.jbargain.scraper.node.post.ScraperCompetitionPost;
 import com.somethinglurks.jbargain.scraper.node.post.ScraperDealPost;
 import com.somethinglurks.jbargain.scraper.node.post.ScraperForumPost;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ScraperJBargain implements JBargain {
 
-    public static final String HOST = "https://ozbargain.com.au";
+    public static final String HOST = "https://www.ozbargain.com.au";
 
     @Override
     public User authenticateUser(String username, String password) throws AuthenticationException {

@@ -1,10 +1,15 @@
 package com.somethinglurks.jbargain.scraper.user;
 
+import com.somethinglurks.jbargain.api.node.meta.Vote;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.api.user.User;
+import com.somethinglurks.jbargain.api.user.exception.VoteException;
 import com.somethinglurks.jbargain.api.user.notification.Notification;
+import com.somethinglurks.jbargain.scraper.OzBargainApi;
 import com.somethinglurks.jbargain.scraper.ScraperJBargain;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -102,34 +107,58 @@ public class ScraperUser implements User {
     }
 
     @Override
-    public boolean vote(Post post, Vote vote) {
+    public void vote(Post post, Vote vote) throws VoteException {
+        // Don't allow Vote.REVOKED
+        if (vote == Vote.REVOKED) {
+            throw new IllegalArgumentException("Cannot cast a revoke vote");
+        }
+
+        // Cast vote
+        JSONObject result = OzBargainApi.call(this, "node_vote", post.getId(),
+                vote.value + "");
+
+        // Throw exception if there is an error message
         try {
-            String data = String.format("{ \"version\": \"1.0\", \"method\": \"node_vote\", \"params\": [%s, %s, false] }",
-                    post.getId(),
-                    vote.value);
+            throw new VoteException(result.getJSONObject("result").getString("errmsg"));
+        } catch (JSONException ignored) {
 
-            Connection.Response response = Jsoup.connect(ScraperJBargain.HOST + "/api/rpc")
-                    .requestBody(data)
-                    .header("Content-Type", "application/json")
-                    .header("Accept", "application/json")
-                    .followRedirects(false)
-                    .ignoreContentType(true)
-                    .cookies(this.cookies)
-                    .method(Connection.Method.POST)
-                    .execute();
-
-            // Successful vote response should show the vote count and a null error
-            String result = response.body().replaceAll("\\{\"result\": \\{\"neg\": \\d+, \"pos\": \\d+}, \"error\": null}", "");
-            return result.isEmpty();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return false;
         }
     }
 
     @Override
-    public boolean vote(Comment comment, Vote vote) {
-        return false;
+    public void vote(Comment comment, Vote vote) throws VoteException {
+        // Don't allow Vote.REVOKED
+        if (vote == Vote.REVOKED) {
+            throw new IllegalArgumentException("Cannot cast a revoke vote");
+        }
+
+        // Cast vote
+        JSONObject result = OzBargainApi.call(this, "comment_vote", comment.getId(),
+                vote.value + "");
+
+        // Throw exception if there is an error message
+        try {
+            throw new VoteException(result.getJSONObject("result").getString("errmsg"));
+        } catch (JSONException ignored) {
+
+        }
+    }
+
+    @Override
+    public void revokeVote(Post post) throws VoteException {
+
+    }
+
+    @Override
+    public void revokeVote(Comment comment) throws VoteException {
+        JSONObject result = OzBargainApi.call(this,
+                "comment_revoke_vote", comment.getId(), this.getId());
+
+        // Throw exception if there is an error message
+        try {
+            throw new VoteException(result.getJSONObject("result").getString("errmsg"));
+        } catch (JSONException ignored) {
+
+        }
     }
 }
