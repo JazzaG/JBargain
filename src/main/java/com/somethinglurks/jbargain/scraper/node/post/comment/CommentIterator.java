@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CommentElementIterator implements Iterator<List<Comment>> {
+public class CommentIterator implements Iterator<List<Comment>> {
 
     private ScraperUser user;
     private String id;
@@ -22,7 +22,7 @@ public class CommentElementIterator implements Iterator<List<Comment>> {
     private int totalPages;
     private int currentPage = 0;
 
-    public CommentElementIterator(ScraperUser user, String id, Element element) {
+    public CommentIterator(ScraperUser user, String id, Element element) {
         this.user = user;
         this.id = id;
 
@@ -78,7 +78,7 @@ public class CommentElementIterator implements Iterator<List<Comment>> {
                 level = Integer.parseInt(value);
 
                 // Add comment
-                comments.add(new CommentElementAdapter(item, level));
+                comments.add(new ScraperComment(item, level));
             }
         }
 

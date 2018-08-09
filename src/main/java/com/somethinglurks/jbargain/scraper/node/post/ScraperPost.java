@@ -6,7 +6,7 @@ import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
-import com.somethinglurks.jbargain.scraper.node.post.comment.CommentElementIterator;
+import com.somethinglurks.jbargain.scraper.node.post.comment.CommentIterator;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
@@ -21,11 +21,11 @@ public class ScraperPost implements Post {
 
     protected Element element;
 
-    private CommentElementIterator commentIterator;
+    private CommentIterator commentIterator;
 
     ScraperPost(Element element, ScraperUser user) {
         this.element = element;
-        this.commentIterator = new CommentElementIterator(user, getId(), element);
+        this.commentIterator = new CommentIterator(user, getId(), element);
     }
 
     @Override
