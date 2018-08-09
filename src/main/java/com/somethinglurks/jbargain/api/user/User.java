@@ -1,7 +1,9 @@
 package com.somethinglurks.jbargain.api.user;
 
+import com.somethinglurks.jbargain.api.node.meta.Vote;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
+import com.somethinglurks.jbargain.api.user.exception.VoteException;
 import com.somethinglurks.jbargain.api.user.notification.Notification;
 
 import java.util.List;
@@ -43,31 +45,34 @@ public interface User extends Person {
      *
      * @param post Post to vote on
      * @param vote Vote value
-     * @return True on success, false otherwise
+     * @throws VoteException if the vote could not be cast
      */
-    boolean vote(Post post, Vote vote);
+    void vote(Post post, Vote vote) throws VoteException;
 
     /**
      * Adds a vote to a comment
      *
      * @param comment Comment to vote on
      * @param vote Vote value
-     * @return True on success, false otherwise
+     * @throws VoteException if the vote could not be cast
      */
-    boolean vote(Comment comment, Vote vote);
+    void vote(Comment comment, Vote vote) throws VoteException;
 
     /**
-     * Represents a vote value
+     * Revokes a vote from a post
+     *
+     * @param post Post to revoke vote from
+     * @throws VoteException if the vote could not be revoked
      */
-    enum Vote {
-        POSITIVE("1"),
-        NEGATIVE("-1");
+    void revokeVote(Post post) throws VoteException;
 
-        public String value;
+    /**
+     * Revokes a vote from a comment
+     *
+     * @param comment Comment to revoke vote from
+     * @throws VoteException if the vote could not be revoked
+     */
+    void revokeVote(Comment comment) throws VoteException;
 
-        Vote(String value) {
-            this.value = value;
-        }
-    }
 
 }

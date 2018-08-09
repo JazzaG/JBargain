@@ -3,8 +3,8 @@ package com.somethinglurks.jbargain.api;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.teaser.Teaser;
-import com.somethinglurks.jbargain.api.user.AuthenticationException;
 import com.somethinglurks.jbargain.api.user.User;
+import com.somethinglurks.jbargain.api.user.exception.AuthenticationException;
 
 import java.io.IOException;
 import java.util.Iterator;
