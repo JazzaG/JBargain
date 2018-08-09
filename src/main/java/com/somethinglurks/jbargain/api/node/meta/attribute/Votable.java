@@ -3,7 +3,7 @@ package com.somethinglurks.jbargain.api.node.meta.attribute;
 /**
  * Represents something that can be voted on
  */
-public interface Votable {
+public interface Votable extends Identifiable {
 
     /**
      * Gets the number of positive votes

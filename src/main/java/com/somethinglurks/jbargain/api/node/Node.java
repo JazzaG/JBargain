@@ -1,22 +1,16 @@
 package com.somethinglurks.jbargain.api.node;
 
+import com.somethinglurks.jbargain.api.node.meta.Author;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.meta.attribute.Flaggable;
-import com.somethinglurks.jbargain.api.node.meta.Author;
+import com.somethinglurks.jbargain.api.node.meta.attribute.Identifiable;
 
 import java.util.Date;
 
 /**
  * Represents an OzBargain node
  */
-public interface Node extends Flaggable {
-
-    /**
-     * Gets the identifier
-     *
-     * @return Identifier
-     */
-    String getId();
+public interface Node extends Identifiable, Flaggable {
 
     /**
      * Gets the title

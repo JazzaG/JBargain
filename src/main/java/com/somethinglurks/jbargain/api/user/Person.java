@@ -1,16 +1,11 @@
 package com.somethinglurks.jbargain.api.user;
 
+import com.somethinglurks.jbargain.api.node.meta.attribute.Identifiable;
+
 /**
  * Represents a person
  */
-public interface Person {
-
-    /**
-     * Gets the identifier
-     *
-     * @return Identifier
-     */
-    String getId();
+public interface Person extends Identifiable {
 
     /**
      * Gets the username
