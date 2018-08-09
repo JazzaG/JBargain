@@ -21,24 +21,20 @@ public interface User extends Person {
     List<Notification> getNotifications();
 
     /**
-     * Adds a comment to a post
+     * Replies to a post
      *
-     * @param post Post to add comment to
-     * @param reply Reply contents
-     * @param associated Flag to indicate if user is associated with the post in any way
-     * @return True on success, false otherwise
+     * @param post Post to reply to
+     * @return ReplyBuilder object, to construct the reply
      */
-    boolean replyTo(Post post, String reply, boolean associated);
+    ReplyBuilder replyTo(Post post);
 
     /**
-     * Adds a comment to another comment
+     * Replies to a comment
      *
      * @param comment Comment to reply to
-     * @param reply Reply contents
-     * @param associated Flag to indicate if user is associated with the post in any way
-     * @return True on success, false otherwise
+     * @return ReplyBuilder object, to construct the reply
      */
-    boolean replyTo(Comment comment, String reply, boolean associated);
+    ReplyBuilder replyTo(Comment comment);
 
     /**
      * Adds a vote to a post
