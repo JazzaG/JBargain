@@ -1,6 +1,8 @@
 package com.somethinglurks.jbargain.scraper.node.post;
 
 import com.somethinglurks.jbargain.api.node.meta.Tag;
+import com.somethinglurks.jbargain.api.node.meta.Vote;
+import com.somethinglurks.jbargain.api.node.meta.Voter;
 import com.somethinglurks.jbargain.api.node.post.DealPost;
 import com.somethinglurks.jbargain.scraper.node.DealDateWrapper;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
@@ -67,5 +69,20 @@ public class ScraperDealPost extends ScraperPost implements DealPost {
     @Override
     public int getNegativeVotes() {
         return StringToInteger.parseSelector(element, "div.n-vote span.votedown");
+    }
+
+    @Override
+    public int getScore() {
+        return 0;
+    }
+
+    @Override
+    public List<Voter> getVoters() {
+        return null;
+    }
+
+    @Override
+    public Vote getUserVote() {
+        return null;
     }
 }

@@ -1,8 +1,6 @@
 package com.somethinglurks.jbargain.scraper.node.teaser;
 
-import com.somethinglurks.jbargain.api.node.meta.Author;
-import com.somethinglurks.jbargain.api.node.meta.Flag;
-import com.somethinglurks.jbargain.api.node.meta.Tag;
+import com.somethinglurks.jbargain.api.node.meta.*;
 import com.somethinglurks.jbargain.api.node.teaser.DealTeaser;
 import com.somethinglurks.jbargain.scraper.node.DealDateWrapper;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
@@ -111,5 +109,18 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
         return Integer.parseInt(value);
     }
 
+    @Override
+    public int getScore() {
+        return 0;
+    }
 
+    @Override
+    public List<Voter> getVoters() {
+        return null;
+    }
+
+    @Override
+    public Vote getUserVote() {
+        return null;
+    }
 }

@@ -1,8 +1,6 @@
 package com.somethinglurks.jbargain.scraper.node.teaser;
 
-import com.somethinglurks.jbargain.api.node.meta.Author;
-import com.somethinglurks.jbargain.api.node.meta.Flag;
-import com.somethinglurks.jbargain.api.node.meta.Tag;
+import com.somethinglurks.jbargain.api.node.meta.*;
 import com.somethinglurks.jbargain.api.node.teaser.CompetitionTeaser;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
@@ -121,6 +119,21 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
     @Override
     public int getNegativeVotes() {
         return 0; // Competitions cannot be negative voted
+    }
+
+    @Override
+    public int getScore() {
+        return 0;
+    }
+
+    @Override
+    public List<Voter> getVoters() {
+        return null;
+    }
+
+    @Override
+    public Vote getUserVote() {
+        return null;
     }
 
     @Override
