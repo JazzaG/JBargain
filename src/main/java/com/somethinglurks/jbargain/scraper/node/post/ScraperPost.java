@@ -20,16 +20,18 @@ import java.util.regex.Pattern;
 public class ScraperPost implements Post {
 
     protected Element element;
+    protected ScraperUser user;
 
     private CommentIterator commentIterator;
 
     ScraperPost(Element element, ScraperUser user) {
         this.element = element;
-        this.commentIterator = new CommentIterator(user, getId(), element);
+        this.user = user;
+        this.commentIterator = new CommentIterator(getId(), element, user);
     }
 
     @Override
-    public Iterator<List<Comment>> getComments() {
+    public Iterator<Comment> getComments() {
         return commentIterator;
     }
 

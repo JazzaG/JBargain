@@ -17,7 +17,6 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 
 public class ScraperJBargain implements JBargain {
 
@@ -97,12 +96,12 @@ public class ScraperJBargain implements JBargain {
     }
 
     @Override
-    public Iterator<List<Teaser>> getFeedByTag(Tag tag) throws IOException {
+    public Iterator<Teaser> getFeedByTag(Tag tag) throws IOException {
         return new TeaserIterator(tag.getEndpoint(), null);
     }
 
     @Override
-    public Iterator<List<Teaser>> getFeedByTag(Tag tag, User user) throws IOException {
+    public Iterator<Teaser> getFeedByTag(Tag tag, User user) throws IOException {
         return new TeaserIterator(tag.getEndpoint(), (ScraperUser) user);
     }
 

@@ -5,7 +5,6 @@ import com.somethinglurks.jbargain.api.node.meta.attribute.Describable;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Represents an OzBargain Post
@@ -13,17 +12,10 @@ import java.util.List;
 public interface Post extends Node, Describable {
 
     /**
-     * Gets an iterator of a list of comments on this post.
+     * Gets an iterator of the comments on this posts
      *
-     * <br />
-     * This is designed in such a way that:
-     * <ul>
-     *     <li>If a user is authenticated; only one element will be present which contains all the comments</li>
-     *     <li>If no user is authenticated; each element represents the comments on each page</li>
-     * </ul>
-     *
-     * @return Iterator of List of comments
+     * @return Comments iterator
      */
-    Iterator<List<Comment>> getComments();
+    Iterator<Comment> getComments();
 
 }

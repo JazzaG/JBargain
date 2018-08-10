@@ -11,79 +11,98 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-public class TeaserIterator implements Iterator<List<Teaser>> {
+public class TeaserIterator implements Iterator<Teaser> {
+
+    private static final String DEAL_SELECTOR = "div.node-ozbdeal[class^=node]";
+    private static final String FORUM_SELECTOR = "table.forum-topics tbody t";
+    private static final String COMP_SELECTOR = "div.node-competition[class^=node]";
 
     private String endpoint;
     private ScraperUser user;
 
-    private Element currentPageElement;
-    private int currentPageIndex = 0;
-    private boolean firstRun = true;
+    private int currentPage = 0;
+    private Elements teasers;
+    private Factory factory;
+    private int teaserIndex = 0;
 
     public TeaserIterator(String endpoint, ScraperUser user) {
         this.endpoint = endpoint;
         this.user = user;
     }
 
-    private void loadPage() {
-        firstRun = false;
-
+    private boolean fetchNextPage() {
         try {
-            String host = ScraperJBargain.HOST + endpoint + "?page=" + currentPageIndex++;
+            String host = String.format("%s%s?page=%d", ScraperJBargain.HOST, endpoint, currentPage++);
             Connection connection = Jsoup.connect(host);
 
+            // Add user cookies if authenticated
             if (user != null) {
                 connection.cookies(user.getCookies());
             }
 
-            currentPageElement = connection.get();
-        } catch (IOException ignored) {
-            // TODO: something here
+            // Create teaser elements based on type of teasers found
+            Element pageElement = connection.get();
+            if ((teasers = pageElement.select(DEAL_SELECTOR)).size() > 0) {
+                factory = new DealFactory();
+//                factory = (ScraperDealTeaser::new);
+            } else if ((teasers = pageElement.select(FORUM_SELECTOR)).size() > 0) {
+                factory = new ForumFactory();
+//                factory = (ScraperForumTeaser::new);
+            } else if ((teasers = pageElement.select(COMP_SELECTOR)).size() > 0) {
+                factory = new CompetitionFactory();
+//                factory = (ScraperCompetitionTeaser::new);
+            } else {
+                return false;
+            }
+
+            // Reset teaser index
+            teaserIndex = 0;
+            return true;
+        } catch (IOException ex) {
+            return false;
         }
     }
 
     @Override
     public boolean hasNext() {
-        // Check if current page element can go to next page, or if this is the first run
-        return firstRun || (currentPageElement != null
-                && currentPageElement.select("a.pager-next.active > i.fa.fa-chevron-right").size() == 1);
+        // Either there is another teaser on the page, or the next page exists and has teasers
+        if (teasers != null && teaserIndex < teasers.size()) {
+            return true;
+        } else {
+            return fetchNextPage();
+        }
     }
 
     @Override
-    public List<Teaser> next() {
-        loadPage();
-        List<Teaser> teasers = new ArrayList<>();
-
-        if (currentPageElement != null) {
-            // Determine type
-            Elements elements;
-
-            // Deals
-            if ((elements = currentPageElement.select("div.node-ozbdeal[class^=node]")).size() > 0) {
-                for (Element element : elements) {
-                    teasers.add(new ScraperDealTeaser(element));
-                }
-            }
-
-            // Forum
-            if ((elements = currentPageElement.select("table.forum-topics tbody tr")).size() > 0) {
-                for (Element element : elements) {
-                    teasers.add(new ScraperForumTeaser(element));
-                }
-            }
-
-            // Competitions
-            if ((elements = currentPageElement.select("div.node-competition[class^=node]")).size() > 0) {
-                for (Element element : elements) {
-                    teasers.add(new ScraperCompetitionTeaser(element));
-                }
-            }
-        }
-
-        return teasers;
+    public Teaser next() {
+        return factory.create(teasers.get(teaserIndex++));
     }
+
+    private interface Factory {
+        Teaser create(Element element);
+    }
+
+    private class DealFactory implements Factory {
+        @Override
+        public Teaser create(Element element) {
+            return new ScraperDealTeaser(element);
+        }
+    }
+
+    private class CompetitionFactory implements Factory {
+        @Override
+        public Teaser create(Element element) {
+            return new ScraperCompetitionTeaser(element);
+        }
+    }
+
+    private class ForumFactory implements Factory {
+        @Override
+        public Teaser create(Element element) {
+            return new ScraperForumTeaser(element);
+        }
+    }
+
 }

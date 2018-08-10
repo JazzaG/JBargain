@@ -8,7 +8,6 @@ import com.somethinglurks.jbargain.api.user.exception.AuthenticationException;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Provides an entry-point to the JBargain API
@@ -52,7 +51,7 @@ public interface JBargain {
      * @return List of teasers
      * @throws IOException if anything goes wrong
      */
-    Iterator<List<Teaser>> getFeedByTag(Tag tag, User user) throws IOException;
+    Iterator<Teaser> getFeedByTag(Tag tag, User user) throws IOException;
 
     /**
      * Gets a list of teasers by tag
@@ -61,6 +60,6 @@ public interface JBargain {
      * @return List of teasers
      * @throws IOException if anything goes wrong
      */
-    Iterator<List<Teaser>> getFeedByTag(Tag tag) throws IOException;
+    Iterator<Teaser> getFeedByTag(Tag tag) throws IOException;
 
 }
