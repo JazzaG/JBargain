@@ -6,8 +6,6 @@ which uses web scraping to fetch data from the website.
 
 
 ## Usage Examples
-As of yet there's not a lot you can do with the API, and so this section won't have a lot of content until I start
-implementing more features. Check out the Issues page to see what I have planned.
 
 ### Instantiation
 ```java
@@ -49,8 +47,12 @@ while (teasers.hasNext() && count++ < 10) {
 ```java
 User user = api.authenticateUser("username", "password");
 
-user.replyTo(post, "Cheers, bought one", false);
-user.replyTo(comment, "RRP is not a bargain!", false);
+user.replyTo(post)
+    .addContent("Plenty of stock at my store")
+    .setAssociated(true)
+    .reply();
+
+user.vote(comment, Vote.POSITIVE);
 ```
 
 
