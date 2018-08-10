@@ -4,6 +4,7 @@ import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
@@ -47,6 +48,15 @@ public class OzBargainApi {
         }
 
         return null;
+    }
+
+    public static Element showComment(String commentId) {
+        String host = String.format("%s/ozbapi/comment/%s/content", ScraperJBargain.HOST, commentId);
+        try {
+            return Jsoup.connect(host).get();
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
 }

@@ -14,6 +14,7 @@ import java.util.List;
 public class ScraperComment implements Comment {
 
     private Element comment;
+    private String id;
     private int level;
 
     private boolean hasFetchedVoteData = false;
@@ -21,8 +22,9 @@ public class ScraperComment implements Comment {
     private int negativeVotes;
     private List<Voter> voters;
 
-    public ScraperComment(Element element, int level) {
-        this.comment = element.select("div.comment-wrap").first();
+    public ScraperComment(Element element, String id, int level) {
+        this.comment = element;
+        this.id = id;
         this.level = level;
     }
 
@@ -41,7 +43,7 @@ public class ScraperComment implements Comment {
 
     @Override
     public String getId() {
-        return comment.id().replaceAll("[^0-9]", "");
+        return id;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.somethinglurks.jbargain.scraper.node.post.comment;
 
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
+import com.somethinglurks.jbargain.scraper.OzBargainApi;
 import com.somethinglurks.jbargain.scraper.ScraperJBargain;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import org.jsoup.Connection;
@@ -60,7 +61,7 @@ public class CommentIterator implements Iterator<Comment> {
     }
 
     private void fetchComments() {
-        comments = postElement.select("ul.comment li");
+        comments = postElement.select("div.comment-wrap");
         commentIndex = 0;
     }
 
@@ -84,15 +85,18 @@ public class CommentIterator implements Iterator<Comment> {
         // Load next comment
         Element commentElement = comments.get(commentIndex++);
 
-        // Get next element if item is empty
-        if (commentElement.children().size() == 0) {
-            commentElement = comments.get(commentIndex++);
-        }
+        // Get comment id
+        String commentId = commentElement.id().replaceAll("[^0-9]", "");
 
         // Get level of comment
-        String levelValue = commentElement.parent().className().replaceAll("[^0-9]", "");
+        String levelValue = commentElement.parent().parent().className().replaceAll("[^0-9]", "");
         int level = Integer.parseInt(levelValue);
 
-        return new ScraperComment(commentElement, level);
+        // Load comment if it's hidden
+        if (commentElement.select("> div.hidden").size() == 1) {
+            commentElement = OzBargainApi.showComment(commentId);
+        }
+
+        return new ScraperComment(commentElement.selectFirst("div.comment"), commentId, level);
     }
 }
