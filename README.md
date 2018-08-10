@@ -56,4 +56,29 @@ user.vote(comment, Vote.POSITIVE);
 ```
 
 
- 
+## Milestones
+
+### Initial release
+ - [ ] Complete the implementation of existing interfaces
+ - [ ] Handle different types of comments (moderator, unpublished)
+ - [ ] Modify User.vote() to accept a Votable instance
+ - [ ] Accept post submissions
+ - [ ] User profile support
+ - [ ] Create methods to fetch post categories as Tag instances (i.e. forum categories, deal categories, 'New Deals', 
+ etc)
+ - [ ] Explore options to maintain granularity of interfaces where appropriate (e.g. Votable interface; not everything
+  that can be voted on can be voted negatively, the list of voters cannot be retrieved, etc)
+ - [ ] Ensure Android compatibility
+
+### Some time in the future
+ - [ ] Support for unpublished submissions
+ - [ ] Account management
+ - [ ] View revision history of submissions
+ - [ ] Support for user notifications
+ - [ ] Support for reports
+ - [ ] Support for bookmarks
+ - [ ] Support for subscriptions
+
+### Far, far in the future 
+ - [ ] Handle pages (pages as listed in the nav bar, product pages, etc)
+ - [ ] Support for the live action feature (maybe)
