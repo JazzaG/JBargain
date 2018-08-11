@@ -89,7 +89,12 @@ public class ScraperUser implements User {
 
         // Throw exception if there is an error message
         try {
-            throw new VoteException(result.getJSONObject("result").getString("errmsg"));
+            // If there is no result, pass on the error fault string
+            if (result.get("result").toString().equals("null")) {
+                throw new VoteException(result.getJSONObject("error").getString("faultString"));
+            } else {
+                throw new VoteException(result.getJSONObject("result").getString("errmsg"));
+            }
         } catch (JSONException ignored) {
 
         }
