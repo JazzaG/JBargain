@@ -20,7 +20,7 @@ public class ScraperForumPost extends ScraperPost implements ForumPost {
         List<PollOption> pollOptions = new ArrayList<>();
 
         for (Element item : element.select("div#poll li")) {
-            pollOptions.add(new ScraperPollOption(item));
+            pollOptions.add(new ScraperPollOption(item, this.getId()));
         }
 
         return pollOptions;

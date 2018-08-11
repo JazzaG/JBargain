@@ -14,12 +14,14 @@ import java.util.List;
 public class ScraperPollOption implements PollOption {
 
     private Element element;
+    private String nodeId;
 
     private Author author;
     private Date date;
 
-    public ScraperPollOption(Element element) {
+    public ScraperPollOption(Element element, String nodeId) {
         this.element = element;
+        this.nodeId = nodeId;
 
         // Set author and date if item was suggested by another user
         if (element.select("div.suggest").size() == 1) {
@@ -35,6 +37,11 @@ public class ScraperPollOption implements PollOption {
             author = null;
             date = null;
         }
+    }
+
+    @Override
+    public String getNodeId() {
+        return nodeId;
     }
 
     @Override

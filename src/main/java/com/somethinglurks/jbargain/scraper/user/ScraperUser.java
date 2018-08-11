@@ -1,8 +1,11 @@
 package com.somethinglurks.jbargain.scraper.user;
 
+import com.somethinglurks.jbargain.api.node.Node;
 import com.somethinglurks.jbargain.api.node.meta.Vote;
+import com.somethinglurks.jbargain.api.node.meta.attribute.Votable;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
+import com.somethinglurks.jbargain.api.node.post.poll.PollOption;
 import com.somethinglurks.jbargain.api.user.ReplyBuilder;
 import com.somethinglurks.jbargain.api.user.User;
 import com.somethinglurks.jbargain.api.user.exception.VoteException;
@@ -77,15 +80,58 @@ public class ScraperUser implements User {
     }
 
     @Override
-    public void vote(Post post, Vote vote) throws VoteException {
+    public void vote(Votable votable, Vote vote) throws VoteException {
         // Don't allow Vote.REVOKED
         if (vote == Vote.REVOKED) {
-            throw new IllegalArgumentException("Cannot cast a revoke vote");
+            throw new VoteException("Cannot cast a revoke vote. Use revokeVote() instead");
         }
 
-        // Cast vote
-        JSONObject result = OzBargainApi.call(this, "node_vote", post.getId(),
-                vote.value + "");
+        // Determine how to cast vote
+        // This could use some fancy design pattern like visitor or strategy, or I could just keep it simple...
+        String method;
+        String[] params;
+
+        if (votable instanceof Node) {
+            method = "node_vote";
+            params = new String[] { votable.getId(), vote.value + "" };
+        } else if (votable instanceof Comment) {
+            method = "comment_vote";
+            params = new String[] { votable.getId(), vote.value + "" };
+        } else if (votable instanceof PollOption) {
+            method = "poll_vote";
+            params = new String[] { votable.getId() };
+        } else {
+            throw new VoteException("Unknown votable type");
+        }
+
+        this.sendVoteCall(method, params);
+    }
+
+    @Override
+    public void revokeVote(Votable votable) throws VoteException {
+        // Determine how to revoke vote
+        String method;
+        String[] params;
+
+        if (votable instanceof Node) {
+            method = "node_revoke_vote";
+            params = new String[] { votable.getId(), this.getId() };
+        } else if (votable instanceof Comment) {
+            method = "node_revoke_comment";
+            params = new String[] { votable.getId(), this.getId() };
+        } else if (votable instanceof PollOption) {
+            method = "poll_revoke";
+            params = new String[] { ((PollOption) votable).getNodeId() };
+        } else {
+            throw new VoteException("Unknown votable type");
+        }
+
+        this.sendVoteCall(method, params);
+
+    }
+
+    private void sendVoteCall(String method, String[] params) throws VoteException {
+        JSONObject result = OzBargainApi.call(this, method, params);
 
         // Throw exception if there is an error message
         try {
@@ -100,40 +146,4 @@ public class ScraperUser implements User {
         }
     }
 
-    @Override
-    public void vote(Comment comment, Vote vote) throws VoteException {
-        // Don't allow Vote.REVOKED
-        if (vote == Vote.REVOKED) {
-            throw new IllegalArgumentException("Cannot cast a revoke vote");
-        }
-
-        // Cast vote
-        JSONObject result = OzBargainApi.call(this, "comment_vote", comment.getId(),
-                vote.value + "");
-
-        // Throw exception if there is an error message
-        try {
-            throw new VoteException(result.getJSONObject("result").getString("errmsg"));
-        } catch (JSONException ignored) {
-
-        }
-    }
-
-    @Override
-    public void revokeVote(Post post) throws VoteException {
-
-    }
-
-    @Override
-    public void revokeVote(Comment comment) throws VoteException {
-        JSONObject result = OzBargainApi.call(this,
-                "comment_revoke_vote", comment.getId(), this.getId());
-
-        // Throw exception if there is an error message
-        try {
-            throw new VoteException(result.getJSONObject("result").getString("errmsg"));
-        } catch (JSONException ignored) {
-
-        }
-    }
 }

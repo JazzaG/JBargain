@@ -61,7 +61,7 @@ user.vote(comment, Vote.POSITIVE);
 ### Initial release
  - [ ] Complete the implementation of existing interfaces
  - [ ] Handle different types of comments (moderator, unpublished)
- - [ ] Modify User.vote() to accept a Votable instance
+ - [x] Modify User.vote() to accept a Votable instance
  - [ ] Accept post submissions
  - [ ] User profile support
  - [ ] Create methods to fetch post categories as Tag instances (i.e. forum categories, deal categories, 'New Deals', 

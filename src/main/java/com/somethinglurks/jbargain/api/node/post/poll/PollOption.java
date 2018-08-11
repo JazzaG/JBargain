@@ -11,6 +11,13 @@ import java.util.Date;
 public interface PollOption extends Votable {
 
     /**
+     * Gets the ID of the node this poll option belongs to
+     *
+     * @return ID of parent node
+     */
+    String getNodeId();
+
+    /**
      * Gets the poll option
      *
      * @return Poll option
