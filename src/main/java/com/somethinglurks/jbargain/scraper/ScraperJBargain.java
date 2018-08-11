@@ -63,8 +63,16 @@ public class ScraperJBargain implements JBargain {
     @Override
     public Post getPostById(String id, User user) throws IOException {
         try {
-            // Download the page
-            Element element = Jsoup.connect(HOST + "/node/" + id).get();
+            // Create connection
+            Connection connection = Jsoup.connect(HOST + "/node/" + id);
+
+            // Add user cookies
+            if (user != null) {
+                connection.cookies(((ScraperUser) user).getCookies());
+            }
+
+            // Download page
+            Element element = connection.get();
 
             /* Determine what type of node this is */
             Element post = element.select("div.node").first();
