@@ -5,12 +5,15 @@ import com.somethinglurks.jbargain.api.node.meta.Flag;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
+import com.somethinglurks.jbargain.scraper.ScraperJBargain;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
 import com.somethinglurks.jbargain.scraper.node.post.comment.CommentIterator;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -22,17 +25,29 @@ public class ScraperPost implements Post {
     protected Element element;
     protected ScraperUser user;
 
-    private CommentIterator commentIterator;
-
     ScraperPost(Element element, ScraperUser user) {
         this.element = element;
         this.user = user;
-        this.commentIterator = new CommentIterator(getId(), element, user);
     }
 
     @Override
-    public Iterator<Comment> getComments() {
-        return commentIterator;
+    public Iterator<Comment> getComments(boolean ignoreUnpublishedComments) {
+        Element targetElement = this.element;
+
+        // Load the comments page if available and parameter flag is set
+        // This is because the comments page does not show unpublished comments
+        if (user != null && ignoreUnpublishedComments) {
+            try {
+                 targetElement = Jsoup
+                        .connect(ScraperJBargain.HOST + "/node/" + getId() + "/comments")
+                        .cookies(user.getCookies())
+                        .get();
+            } catch (IOException ignored) {
+
+            }
+        }
+
+        return new CommentIterator(getId(), targetElement, user);
     }
 
     @Override

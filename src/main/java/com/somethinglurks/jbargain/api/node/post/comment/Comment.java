@@ -12,6 +12,27 @@ import java.util.Date;
 public interface Comment extends Describable, Votable {
 
     /**
+     * Gets what type of comment this is
+     *
+     * @return Type of comment
+     */
+    Type getType();
+
+    /**
+     * Gets the reason this comment was unpublished
+     *
+     * @return Reason this comment was unpublished, or null if comment is not unpublished or has no message
+     */
+    String getUnpublishedReason();
+
+    /**
+     * Reveal the comment
+     *
+     * @param listener Task to execute when comment is revealed
+     */
+    void reveal(RevealListener listener);
+
+    /**
      * Gets the author
      *
      * @return Author
@@ -31,4 +52,29 @@ public interface Comment extends Describable, Votable {
      * @return Comment level
      */
     int getLevel();
+
+    /**
+     * Represents the type of comment
+     */
+    enum Type {
+        /** Visible comment */
+        VISIBLE,
+
+        /** Hidden comment, usually for having a low score */
+        HIDDEN,
+
+        /** A comment that is unpublished, usually by a moderator */
+        UNPUBLISHED
+    }
+
+    /**
+     * Handles a comment that was revealed
+     */
+    interface RevealListener {
+
+        /**
+         * Called when a comment is revealed
+         */
+        void onCommentReveal();
+    }
 }

@@ -4,6 +4,7 @@ import com.somethinglurks.jbargain.api.node.meta.Author;
 import com.somethinglurks.jbargain.api.node.meta.Vote;
 import com.somethinglurks.jbargain.api.node.meta.Voter;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
+import com.somethinglurks.jbargain.scraper.OzBargainApi;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
@@ -13,19 +14,22 @@ import java.util.List;
 
 public class ScraperComment implements Comment {
 
-    private Element comment;
+    private Element element;
     private String id;
     private int level;
+
+    private Type type;
 
     private boolean hasFetchedVoteData = false;
     private int positiveVotes;
     private int negativeVotes;
     private List<Voter> voters;
 
-    public ScraperComment(Element element, String id, int level) {
-        this.comment = element;
+    public ScraperComment(Element element, String id, int level, Type type) {
+        this.element = element;
         this.id = id;
         this.level = level;
+        this.type = type;
     }
 
     private void fetchVoteData() {
@@ -37,8 +41,34 @@ public class ScraperComment implements Comment {
     }
 
     @Override
+    public Type getType() {
+        return this.type;
+    }
+
+    @Override
+    public String getUnpublishedReason() {
+        if (this.type != Type.UNPUBLISHED) {
+            return null;
+        }
+
+        String reason = element.select("em").text();
+
+        // Trim the enclosing parenthesis
+        return reason.substring(1, reason.length() - 1);
+    }
+
+    @Override
+    public void reveal(RevealListener listener) {
+        this.element = OzBargainApi.showComment(getId());
+
+        if (listener != null) {
+            listener.onCommentReveal();
+        }
+    }
+
+    @Override
     public String getDescription() {
-        return comment.select("div.content").html();
+        return element.select("div.content").html();
     }
 
     @Override
@@ -49,16 +79,16 @@ public class ScraperComment implements Comment {
     @Override
     public Author getAuthor() {
         return new Author(
-                comment.select("div.submitted a").attr("href").replaceAll("[^0-9]", ""),
-                comment.select("div.submitted strong").text(),
-                comment.select("img.gravatar").attr("src"),
-                Flags.createFromElements(comment.select("div.submitted span"))
+                element.select("div.submitted a").attr("href").replaceAll("[^0-9]", ""),
+                element.select("div.submitted strong").text(),
+                element.select("img.gravatar").attr("src"),
+                Flags.createFromElements(element.select("div.submitted span"))
         );
     }
 
     @Override
     public Date getDate() {
-        return StringToDate.parsePostDate(comment.select("div.submitted").text(), true);
+        return StringToDate.parsePostDate(element.select("div.submitted").text(), true);
     }
 
     @Override
@@ -68,7 +98,7 @@ public class ScraperComment implements Comment {
 
     @Override
     public int getScore() {
-        String value = comment.select("span.cvc").text().replaceAll("[^0-9\\-]", "");
+        String value = element.select("span.cvc").text().replaceAll("[^0-9\\-]", "");
 
         return Integer.parseInt(value);
     }

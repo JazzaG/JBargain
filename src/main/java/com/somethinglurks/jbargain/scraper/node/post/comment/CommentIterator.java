@@ -1,7 +1,6 @@
 package com.somethinglurks.jbargain.scraper.node.post.comment;
 
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
-import com.somethinglurks.jbargain.scraper.OzBargainApi;
 import com.somethinglurks.jbargain.scraper.ScraperJBargain;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import org.jsoup.Connection;
@@ -83,20 +82,27 @@ public class CommentIterator implements Iterator<Comment> {
     @Override
     public Comment next() {
         // Load next comment
-        Element commentElement = comments.get(commentIndex++);
+        Element commentWrap = comments.get(commentIndex++);
 
         // Get comment id
-        String commentId = commentElement.id().replaceAll("[^0-9]", "");
+        String commentId = commentWrap.id().replaceAll("[^0-9]", "");
 
         // Get level of comment
-        String levelValue = commentElement.parent().parent().className().replaceAll("[^0-9]", "");
+        String levelValue = commentWrap.parent().parent().className().replaceAll("[^0-9]", "");
         int level = Integer.parseInt(levelValue);
 
-        // Load comment if it's hidden
-        if (commentElement.select("> div.hidden").size() == 1) {
-            commentElement = OzBargainApi.showComment(commentId);
+        // Get type of comment
+        Element targetElement;
+        Comment.Type type;
+        if ((targetElement = commentWrap.selectFirst("div.unpublished")) != null) {
+            type = Comment.Type.UNPUBLISHED;
+        } else if ((targetElement = commentWrap.selectFirst("div.hidden")) != null) {
+            type = Comment.Type.HIDDEN;
+        } else {
+            targetElement = commentWrap.selectFirst("div.comment");
+            type = Comment.Type.VISIBLE;
         }
 
-        return new ScraperComment(commentElement.selectFirst("div.comment"), commentId, level);
+        return new ScraperComment(targetElement, commentId, level, type);
     }
 }

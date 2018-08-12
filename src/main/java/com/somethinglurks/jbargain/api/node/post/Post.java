@@ -14,8 +14,10 @@ public interface Post extends Node, Describable {
     /**
      * Gets an iterator of the comments on this posts
      *
+     * @param ignoreUnpublishedComments Flag to ignore unpublished comments. This only applies if there is an
+     *                                  authenticated user
      * @return Comments iterator
      */
-    Iterator<Comment> getComments();
+    Iterator<Comment> getComments(boolean ignoreUnpublishedComments);
 
 }
