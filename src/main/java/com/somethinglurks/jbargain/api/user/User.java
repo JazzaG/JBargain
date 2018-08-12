@@ -7,12 +7,13 @@ import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.api.user.exception.VoteException;
 import com.somethinglurks.jbargain.api.user.notification.Notification;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Represents an authenticated user
  */
-public interface User extends Person {
+public interface User extends Person, Serializable {
 
     /**
      * Gets a list of notifications at the current time

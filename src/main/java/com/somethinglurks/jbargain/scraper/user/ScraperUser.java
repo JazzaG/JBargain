@@ -143,6 +143,8 @@ public class ScraperUser implements User {
             }
         } catch (JSONException ignored) {
 
+        } catch (Exception ex) {
+            throw new VoteException(ex.getMessage());
         }
     }
 
