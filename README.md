@@ -22,9 +22,10 @@ post.getAuthor().getUsername(); // scotty
 
 ### Retrieve post comments
 ```java
-Post post = api.getPostById("1000");
+Post post = api.getPostById("1000", user);
 
-Iterator<Comment> comments = post.getComments();
+boolean ignoreUnpublishedComments = false;
+Iterator<Comment> comments = post.getComments(ignoreUnpublishedComments);
 while (comments.hasNext()) {
     Comment comment = comments.next();
 }
@@ -39,7 +40,7 @@ Tag tag = new Tag("Popular Deals", "/deals/popular");
 Iterator<Teaser> teasers = api.getFeedByTag(tag);
 int count = 0;
 while (teasers.hasNext() && count++ < 10) {
-    teasers.next().getTitle();
+    Teaser teaser = teasers.next();
 }
 ```
 
