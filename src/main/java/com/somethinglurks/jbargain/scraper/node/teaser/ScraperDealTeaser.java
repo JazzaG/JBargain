@@ -90,12 +90,6 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
     }
 
     @Override
-    public int getNumberOfClicks() {
-        // Number of clicks isn't shown on the nodes, only within the posts
-        return 0;
-    }
-
-    @Override
     public int getPositiveVotes() {
         String value = element.select("span.nvb.voteup").text();
 

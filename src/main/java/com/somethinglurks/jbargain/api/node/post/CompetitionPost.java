@@ -28,4 +28,11 @@ public interface CompetitionPost extends Post, CompetitionNode {
      */
     String getTermsAndConditionsUrl();
 
+    /**
+     * Gets the number of clicks on this link
+     *
+     * @return Number of links
+     */
+    int getNumberOfClicks();
+
 }

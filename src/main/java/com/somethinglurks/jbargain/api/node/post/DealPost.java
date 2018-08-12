@@ -17,4 +17,11 @@ public interface DealPost extends Post, DealNode {
      */
     List<Tag> getTags();
 
+    /**
+     * Gets the number of clicks on this link
+     *
+     * @return Number of links
+     */
+    int getNumberOfClicks();
+
 }

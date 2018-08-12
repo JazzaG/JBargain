@@ -19,11 +19,4 @@ public interface Linkable {
      */
     String getThumbnailUrl();
 
-    /**
-     * Gets the number of clicks on this link
-     *
-     * @return Number of links
-     */
-    int getNumberOfClicks();
-
 }

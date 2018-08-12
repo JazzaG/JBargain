@@ -105,11 +105,6 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
     }
 
     @Override
-    public int getNumberOfClicks() {
-        return 0; // Not shown on node
-    }
-
-    @Override
     public int getPositiveVotes() {
         String value = element.select("span.nvb.voteup").text();
 
