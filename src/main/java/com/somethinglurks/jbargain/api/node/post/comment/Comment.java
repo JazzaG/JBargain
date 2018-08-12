@@ -1,17 +1,16 @@
 package com.somethinglurks.jbargain.api.node.post.comment;
 
 import com.somethinglurks.jbargain.api.node.meta.Author;
-import com.somethinglurks.jbargain.api.node.meta.Voter;
 import com.somethinglurks.jbargain.api.node.meta.attribute.Describable;
 import com.somethinglurks.jbargain.api.node.meta.attribute.Votable;
+import com.somethinglurks.jbargain.api.node.meta.attribute.VotesViewable;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Represents a comment on a post
  */
-public interface Comment extends Describable, Votable {
+public interface Comment extends Describable, Votable, VotesViewable {
 
     /**
      * Gets the score of this item, which is equal to the positive votes minus the negative votes
@@ -19,13 +18,6 @@ public interface Comment extends Describable, Votable {
      * @return Score
      */
     int getScore();
-
-    /**
-     * Gets the list of voters who have voted on this content
-     *
-     * @return List of voters
-     */
-    List<Voter> getVoters();
 
     /**
      * Gets what type of comment this is
