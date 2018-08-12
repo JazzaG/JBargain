@@ -5,6 +5,7 @@ import com.somethinglurks.jbargain.api.node.meta.Flag;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.teaser.ForumTeaser;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
+import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
@@ -15,8 +16,8 @@ import java.util.List;
 
 public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
 
-    public ScraperForumTeaser(Element element) {
-        super(element);
+    public ScraperForumTeaser(Element element, ScraperUser user) {
+        super(element, user);
     }
 
     @Override
@@ -61,8 +62,9 @@ public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
 
     @Override
     public Tag getCategory() {
-        // TODO:
-        return null;
+        Element anchor = element.selectFirst("div.nodemeta span a");
+
+        return new Tag(anchor.text(), anchor.attr("href"));
     }
 
     @Override

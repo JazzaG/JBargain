@@ -3,6 +3,7 @@ package com.somethinglurks.jbargain.scraper.node.teaser;
 import com.somethinglurks.jbargain.api.node.meta.*;
 import com.somethinglurks.jbargain.api.node.teaser.CompetitionTeaser;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
+import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
 
@@ -11,8 +12,8 @@ import java.util.List;
 
 public class ScraperCompetitionTeaser extends ScraperTeaser implements CompetitionTeaser {
 
-    public ScraperCompetitionTeaser(Element element) {
-        super(element);
+    public ScraperCompetitionTeaser(Element element, ScraperUser user) {
+        super(element, user);
     }
 
     @Override
@@ -81,6 +82,13 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
     }
 
     @Override
+    public int getNumberOfComments() {
+        String value = element.select("ul.links li:nth-child(1)").text();
+
+        return Integer.parseInt(value);
+    }
+
+    @Override
     public int getNumberOfEntrants() {
         String value = element.select("ul.links li:nth-child(2)").text();
 
@@ -118,11 +126,11 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
 
     @Override
     public Vote getUserVote() {
-        return null; // TODO
+        if (element.select("div.n-vote.voteup").size() == 1) {
+            return Vote.POSITIVE;
+        } else {
+            return null;
+        }
     }
 
-    @Override
-    public int getNumberOfComments() {
-        return 0; // TODO
-    }
 }

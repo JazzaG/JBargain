@@ -4,6 +4,8 @@ import com.somethinglurks.jbargain.api.node.meta.*;
 import com.somethinglurks.jbargain.api.node.teaser.DealTeaser;
 import com.somethinglurks.jbargain.scraper.node.DealDateWrapper;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
+import com.somethinglurks.jbargain.scraper.node.meta.VotersList;
+import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
 
@@ -14,8 +16,8 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
 
     private DealDateWrapper dateWrapper;
 
-    public ScraperDealTeaser(Element element) {
-        super(element);
+    public ScraperDealTeaser(Element element, ScraperUser user) {
+        super(element, user);
         this.dateWrapper = new DealDateWrapper(element);
     }
 
@@ -105,11 +107,23 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
 
     @Override
     public List<Voter> getVoters() {
-        return null; // TODO
+        if (this.user == null) {
+            return null;
+        }
+
+        return new VotersList(getId(), user);
     }
 
     @Override
     public Vote getUserVote() {
-        return null; // TODO
+        if (element.select("div.n-vote.voteup").size() == 1) {
+            return Vote.POSITIVE;
+        }
+
+        if (element.select("div.n-vote votedown").size() == 1) {
+            return Vote.NEGATIVE;
+        }
+
+        return null;
     }
 }

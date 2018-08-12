@@ -5,6 +5,7 @@ import com.somethinglurks.jbargain.api.node.meta.Vote;
 import com.somethinglurks.jbargain.api.node.meta.Voter;
 import com.somethinglurks.jbargain.api.node.post.DealPost;
 import com.somethinglurks.jbargain.scraper.node.DealDateWrapper;
+import com.somethinglurks.jbargain.scraper.node.meta.VotersList;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
@@ -73,11 +74,23 @@ public class ScraperDealPost extends ScraperPost implements DealPost {
 
     @Override
     public List<Voter> getVoters() {
-        return null; // TODO
+        if (this.user == null) {
+            return null;
+        }
+
+        return new VotersList(getId(), user);
     }
 
     @Override
     public Vote getUserVote() {
-        return null; // TODO
+        if (element.select("div.n-vote.voteup").size() == 1) {
+            return Vote.POSITIVE;
+        }
+
+        if (element.select("div.n-vote votedown").size() == 1) {
+            return Vote.NEGATIVE;
+        }
+
+        return null;
     }
 }

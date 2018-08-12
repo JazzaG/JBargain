@@ -77,31 +77,31 @@ public class TeaserIterator implements Iterator<Teaser> {
 
     @Override
     public Teaser next() {
-        return factory.create(teasers.get(teaserIndex++));
+        return factory.create(teasers.get(teaserIndex++), user);
     }
 
     private interface Factory {
-        Teaser create(Element element);
+        Teaser create(Element element, ScraperUser user);
     }
 
     private class DealFactory implements Factory {
         @Override
-        public Teaser create(Element element) {
-            return new ScraperDealTeaser(element);
+        public Teaser create(Element element, ScraperUser user) {
+            return new ScraperDealTeaser(element, user);
         }
     }
 
     private class CompetitionFactory implements Factory {
         @Override
-        public Teaser create(Element element) {
-            return new ScraperCompetitionTeaser(element);
+        public Teaser create(Element element, ScraperUser user) {
+            return new ScraperCompetitionTeaser(element, user);
         }
     }
 
     private class ForumFactory implements Factory {
         @Override
-        public Teaser create(Element element) {
-            return new ScraperForumTeaser(element);
+        public Teaser create(Element element, ScraperUser user) {
+            return new ScraperForumTeaser(element, user);
         }
     }
 

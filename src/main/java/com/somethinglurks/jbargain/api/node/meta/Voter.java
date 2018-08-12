@@ -1,5 +1,7 @@
 package com.somethinglurks.jbargain.api.node.meta;
 
+import java.util.Date;
+
 /**
  * Represents a voter
  */
@@ -7,10 +9,12 @@ public class Voter {
 
     private Author author;
     private Vote vote;
+    private Date date;
 
-    public Voter(Author author, Vote vote) {
+    public Voter(Author author, Vote vote, Date date) {
         this.author = author;
         this.vote = vote;
+        this.date = date;
     }
 
     /**
@@ -29,5 +33,14 @@ public class Voter {
      */
     public Vote getVote() {
         return vote;
+    }
+
+    /**
+     * Gets the date this vote was cast
+     *
+     * @return Date of vote
+     */
+    public Date getDate() {
+        return date;
     }
 }
