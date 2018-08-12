@@ -20,7 +20,7 @@ post.getTitle(); // 20% Off Everything in Stock at Kooring, 1-4 November
 post.getAuthor().getUsername(); // scotty
 ```
 
-### Retrive post comments
+### Retrieve post comments
 ```java
 Post post = api.getPostById("1000");
 
