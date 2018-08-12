@@ -67,7 +67,7 @@ user.vote(comment, Vote.POSITIVE);
  - [ ] User profile support
  - [ ] Create methods to fetch post categories as Tag instances (i.e. forum categories, deal categories, 'New Deals', 
  etc)
- - [ ] Explore options to maintain granularity of interfaces where appropriate (e.g. Votable interface; not everything
+ - [x] Explore options to maintain granularity of interfaces where appropriate (e.g. Votable interface; not everything
   that can be voted on can be voted negatively, the list of voters cannot be retrieved, etc)
  - [ ] Ensure Android compatibility
 

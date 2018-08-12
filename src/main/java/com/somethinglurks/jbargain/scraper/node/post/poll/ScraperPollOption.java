@@ -2,14 +2,12 @@ package com.somethinglurks.jbargain.scraper.node.post.poll;
 
 import com.somethinglurks.jbargain.api.node.meta.Author;
 import com.somethinglurks.jbargain.api.node.meta.Vote;
-import com.somethinglurks.jbargain.api.node.meta.Voter;
 import com.somethinglurks.jbargain.api.node.post.poll.PollOption;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class ScraperPollOption implements PollOption {
 
@@ -62,21 +60,6 @@ public class ScraperPollOption implements PollOption {
     @Override
     public int getScore() {
         return Integer.parseInt(element.select("div.n-vote > span > span").text());
-    }
-
-    @Override
-    public int getPositiveVotes() {
-        return getScore();
-    }
-
-    @Override
-    public int getNegativeVotes() {
-        return 0; // poll options cannot be negatively voted on
-    }
-
-    @Override
-    public List<Voter> getVoters() {
-        return null; // cannot view voters of poll options
     }
 
     @Override

@@ -72,17 +72,12 @@ public class ScraperDealPost extends ScraperPost implements DealPost {
     }
 
     @Override
-    public int getScore() {
-        return 0;
-    }
-
-    @Override
     public List<Voter> getVoters() {
-        return null;
+        return null; // TODO
     }
 
     @Override
     public Vote getUserVote() {
-        return null;
+        return null; // TODO
     }
 }

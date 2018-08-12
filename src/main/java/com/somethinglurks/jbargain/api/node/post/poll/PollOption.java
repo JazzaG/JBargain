@@ -25,6 +25,13 @@ public interface PollOption extends Votable {
     String getOption();
 
     /**
+     * Gets the score of this item, which is equal to the positive votes minus the negative votes
+     *
+     * @return Score
+     */
+    int getScore();
+
+    /**
      * Get the user who suggested this option
      *
      * @return Author of option

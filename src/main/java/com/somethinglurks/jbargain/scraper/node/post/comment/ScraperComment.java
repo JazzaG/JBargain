@@ -14,15 +14,13 @@ import java.util.List;
 
 public class ScraperComment implements Comment {
 
-    private Element element;
+    public Element element;
     private String id;
     private int level;
 
     private Type type;
 
     private boolean hasFetchedVoteData = false;
-    private int positiveVotes;
-    private int negativeVotes;
     private List<Voter> voters;
 
     public ScraperComment(Element element, String id, int level, Type type) {
@@ -98,25 +96,23 @@ public class ScraperComment implements Comment {
 
     @Override
     public int getScore() {
-        String value = element.select("span.cvc").text().replaceAll("[^0-9\\-]", "");
+        switch (type) {
+            case UNPUBLISHED:
+                return 0;
 
-        return Integer.parseInt(value);
-    }
+            case HIDDEN:
+                return 0;
 
-    @Override
-    public int getPositiveVotes() {
-        fetchVoteData();
-        return positiveVotes;
-    }
-
-    @Override
-    public int getNegativeVotes() {
-        fetchVoteData();
-        return negativeVotes;
+            case VISIBLE:
+            default:
+                String value = element.select("span.cvc").text().replaceAll("[^0-9\\-]", "");
+                return Integer.parseInt(value);
+        }
     }
 
     @Override
     public List<Voter> getVoters() {
+        // TODO
         fetchVoteData();
         return voters;
     }

@@ -100,16 +100,6 @@ public class ScraperCompetitionPost extends ScraperPost implements CompetitionPo
     }
 
     @Override
-    public int getNegativeVotes() {
-        return StringToInteger.parseSelector(element, "div.n-vote span.votedown");
-    }
-
-    @Override
-    public int getScore() {
-        return 0;
-    }
-
-    @Override
     public List<Voter> getVoters() {
         return null;
     }

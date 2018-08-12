@@ -117,27 +117,17 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
     }
 
     @Override
-    public int getNegativeVotes() {
-        return 0; // Competitions cannot be negative voted
-    }
-
-    @Override
-    public int getScore() {
-        return 0;
-    }
-
-    @Override
     public List<Voter> getVoters() {
-        return null;
+        return null; // TODO
     }
 
     @Override
     public Vote getUserVote() {
-        return null;
+        return null; // TODO
     }
 
     @Override
     public int getNumberOfComments() {
-        return 0;
+        return 0; // TODO
     }
 }

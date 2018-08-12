@@ -110,17 +110,12 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
     }
 
     @Override
-    public int getScore() {
-        return 0;
-    }
-
-    @Override
     public List<Voter> getVoters() {
-        return null;
+        return null; // TODO
     }
 
     @Override
     public Vote getUserVote() {
-        return null;
+        return null; // TODO
     }
 }
