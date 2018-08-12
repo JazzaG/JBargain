@@ -71,6 +71,7 @@ user.vote(comment, Vote.POSITIVE);
  - [ ] Ensure Android compatibility
 
 ### Some time in the future
+ - [ ] Support for other methods of user authentication
  - [ ] Support for unpublished submissions
  - [ ] Account management
  - [ ] View revision history of submissions
