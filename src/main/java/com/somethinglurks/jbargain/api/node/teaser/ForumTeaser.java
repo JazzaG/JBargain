@@ -11,16 +11,16 @@ import java.util.Date;
 public interface ForumTeaser extends Teaser, ForumNode {
 
     /**
-     * Gets the author of the last reply
+     * Gets the author of the last reply, if available
      *
-     * @return Last reply author
+     * @return Last reply author, or null if not available
      */
     Author getLastReplyAuthor();
 
     /**
-     * Gets the date of the last reply
+     * Gets the date of the last reply, if available
      *
-     * @return Last reply date
+     * @return Last reply date, or null if not available
      */
     Date getLastReplyDate();
 

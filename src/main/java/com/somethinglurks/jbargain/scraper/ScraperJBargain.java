@@ -105,12 +105,12 @@ public class ScraperJBargain implements JBargain {
 
     @Override
     public Iterator<Teaser> getFeedByTag(Tag tag) throws IOException {
-        return new TeaserIterator(tag.getEndpoint(), null);
+        return new TeaserIterator(tag, null);
     }
 
     @Override
     public Iterator<Teaser> getFeedByTag(Tag tag, User user) throws IOException {
-        return new TeaserIterator(tag.getEndpoint(), (ScraperUser) user);
+        return new TeaserIterator(tag, (ScraperUser) user);
     }
 
 

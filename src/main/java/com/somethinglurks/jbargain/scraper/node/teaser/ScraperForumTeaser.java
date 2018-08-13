@@ -16,23 +16,44 @@ import java.util.List;
 
 public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
 
-    public ScraperForumTeaser(Element element, ScraperUser user) {
+    private boolean withinCategory;
+    private Tag category;
+
+//    public ScraperForumTeaser(Element element, ScraperUser user) {
+//        super(element, user);
+//    }
+
+    public ScraperForumTeaser(Element element, ScraperUser user, boolean withinCategory, Tag category) {
         super(element, user);
+
+        this.withinCategory = withinCategory;
+        this.category = category;
     }
 
     @Override
     public Author getLastReplyAuthor() {
-        return new AuthorElementAdapter(element.selectFirst("td.last-reply"));
+        if (withinCategory) {
+            return new AuthorElementAdapter(element.selectFirst("td.last-reply"));
+        } else {
+            return null;
+        }
     }
 
     @Override
     public Date getLastReplyDate() {
-        return StringToDate.parsePostDate(element.select("td.last-reply div").text(), false);
+        if (withinCategory) {
+            return StringToDate.parsePostDate(element.select("td.last-reply div").text(), false);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public String getId() {
-        return element.select("td.topic span.title a").attr("href").replaceAll("[^0-9]", "");
+        return element
+                .select("td.topic span.title a")
+                .attr("href")
+                .replaceAll("[^0-9]", "");
     }
 
     @Override
@@ -52,9 +73,13 @@ public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
 
     @Override
     public Tag getCategory() {
-        Element anchor = element.selectFirst("div.nodemeta span a");
-
-        return new Tag(anchor.text(), anchor.attr("href"));
+        if (withinCategory) {
+            return category;
+        } else {
+            return new Tag(
+                    element.select("td.forum a").text(),
+                    element.select("td.forum a").attr("href"));
+        }
     }
 
     @Override
@@ -64,6 +89,10 @@ public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
 
     @Override
     public int getNumberOfComments() {
-        return StringToInteger.parseSelector(element, "td.replies");
+        if (element.selectFirst("td.replies") == null) {
+            return 0;
+        } else {
+            return StringToInteger.parseSelector(element, "td.replies");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.somethinglurks.jbargain.scraper;
 
+import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.teaser.Teaser;
 import com.somethinglurks.jbargain.scraper.node.teaser.ScraperCompetitionTeaser;
 import com.somethinglurks.jbargain.scraper.node.teaser.ScraperDealTeaser;
@@ -12,14 +13,16 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TeaserIterator implements Iterator<Teaser> {
 
     private static final String DEAL_SELECTOR = "div.node-ozbdeal[class^=node]";
-    private static final String FORUM_SELECTOR = "table.forum-topics tbody t";
+    private static final String FORUM_SELECTOR = "div#forum tbody tr";
     private static final String COMP_SELECTOR = "div.node-competition[class^=node]";
 
-    private String endpoint;
+    private Tag tag;
     private ScraperUser user;
 
     private int currentPage = 0;
@@ -27,14 +30,14 @@ public class TeaserIterator implements Iterator<Teaser> {
     private Factory factory;
     private int teaserIndex = 0;
 
-    public TeaserIterator(String endpoint, ScraperUser user) {
-        this.endpoint = endpoint;
+    public TeaserIterator(Tag tag, ScraperUser user) {
+        this.tag = tag;
         this.user = user;
     }
 
     private boolean fetchNextPage() {
         try {
-            String host = String.format("%s%s?page=%d", ScraperJBargain.HOST, endpoint, currentPage++);
+            String host = String.format("%s%s?page=%d", ScraperJBargain.HOST, tag.getEndpoint(), currentPage++);
             Connection connection = Jsoup.connect(host);
 
             // Add user cookies if authenticated
@@ -101,7 +104,11 @@ public class TeaserIterator implements Iterator<Teaser> {
     private class ForumFactory implements Factory {
         @Override
         public Teaser create(Element element, ScraperUser user) {
-            return new ScraperForumTeaser(element, user);
+            // We are within the category if the endpoint is a number, i.e. /forum/30
+            Matcher matcher = Pattern.compile("/forum/[0-9]+").matcher(tag.getEndpoint());
+            boolean withinCategory = matcher.find();
+
+            return new ScraperForumTeaser(element, user, withinCategory, tag);
         }
     }
 
