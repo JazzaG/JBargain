@@ -38,7 +38,7 @@ public class ScraperPollOption implements PollOption {
     }
 
     @Override
-    public String getOption() {
+    public String getDescription() {
         return element.select("span.polltext").text();
     }
 
@@ -59,7 +59,11 @@ public class ScraperPollOption implements PollOption {
 
     @Override
     public Vote getUserVote() {
-        return null; // TODO
+        if (element.select("div.n-vote").hasClass("voteup")) {
+            return Vote.POSITIVE;
+        } else {
+            return null;
+        }
     }
 
     @Override

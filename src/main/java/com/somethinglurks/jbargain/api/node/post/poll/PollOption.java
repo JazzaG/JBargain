@@ -1,6 +1,7 @@
 package com.somethinglurks.jbargain.api.node.post.poll;
 
 import com.somethinglurks.jbargain.api.node.meta.Author;
+import com.somethinglurks.jbargain.api.node.meta.attribute.Describable;
 import com.somethinglurks.jbargain.api.node.meta.attribute.Votable;
 
 import java.util.Date;
@@ -8,7 +9,7 @@ import java.util.Date;
 /**
  * Represents an option in a forum poll
  */
-public interface PollOption extends Votable {
+public interface PollOption extends Describable, Votable {
 
     /**
      * Gets the ID of the node this poll option belongs to
@@ -16,13 +17,6 @@ public interface PollOption extends Votable {
      * @return ID of parent node
      */
     String getNodeId();
-
-    /**
-     * Gets the poll option
-     *
-     * @return Poll option
-     */
-    String getOption();
 
     /**
      * Gets the score of this item, which is equal to the positive votes minus the negative votes
