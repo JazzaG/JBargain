@@ -62,6 +62,11 @@ public interface Comment extends Describable, Votable {
      */
     int getLevel();
 
+    /**
+     * Gets the votes on this comment
+     *
+     * @return Voters of this comment
+     */
     Voters getVoters();
 
     /**
