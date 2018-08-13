@@ -47,12 +47,8 @@ public class ScraperComment implements Comment {
     }
 
     @Override
-    public void reveal(RevealListener listener) {
+    public void reveal() {
         this.element = OzBargainApi.showComment(getId());
-
-        if (listener != null) {
-            listener.onCommentReveal();
-        }
     }
 
     @Override

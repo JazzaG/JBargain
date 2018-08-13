@@ -35,11 +35,9 @@ public interface Comment extends Describable, Votable {
     String getUnpublishedReason();
 
     /**
-     * Reveal the comment
-     *
-     * @param listener Task to execute when comment is revealed
+     * Fetches and stores the hidden comment
      */
-    void reveal(RevealListener listener);
+    void reveal();
 
     /**
      * Gets the author
@@ -81,17 +79,6 @@ public interface Comment extends Describable, Votable {
 
         /** A comment that is unpublished, usually by a moderator */
         UNPUBLISHED
-    }
-
-    /**
-     * Handles a comment that was revealed
-     */
-    interface RevealListener {
-
-        /**
-         * Called when a comment is revealed
-         */
-        void onCommentReveal();
     }
 
     /**
