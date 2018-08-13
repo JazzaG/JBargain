@@ -37,7 +37,7 @@ while (comments.hasNext()) {
 Tag tag = new Tag("Popular Deals", "/deals/popular");
 
 // Get the first 10 popular deals
-Iterator<Teaser> teasers = api.getFeedByTag(tag);
+Iterator<Teaser> teasers = api.getTeasersByTag(tag);
 int count = 0;
 while (teasers.hasNext() && count++ < 10) {
     Teaser teaser = teasers.next();

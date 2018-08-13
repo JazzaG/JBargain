@@ -51,7 +51,7 @@ public interface JBargain {
      * @return List of teasers
      * @throws IOException if anything goes wrong
      */
-    Iterator<Teaser> getFeedByTag(Tag tag, User user) throws IOException;
+    Iterator<Teaser> getTeasersByTag(Tag tag, User user) throws IOException;
 
     /**
      * Gets a list of teasers by tag
@@ -60,6 +60,6 @@ public interface JBargain {
      * @return List of teasers
      * @throws IOException if anything goes wrong
      */
-    Iterator<Teaser> getFeedByTag(Tag tag) throws IOException;
+    Iterator<Teaser> getTeasersByTag(Tag tag) throws IOException;
 
 }
