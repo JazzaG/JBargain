@@ -1,15 +1,15 @@
 package com.somethinglurks.jbargain.api.node;
 
 import com.somethinglurks.jbargain.api.node.meta.attribute.Linkable;
+import com.somethinglurks.jbargain.api.node.meta.attribute.NodeVotesViewable;
 import com.somethinglurks.jbargain.api.node.meta.attribute.Votable;
-import com.somethinglurks.jbargain.api.node.meta.attribute.VotesViewable;
 
 import java.util.Date;
 
 /**
  * Represents a competition node
  */
-public interface CompetitionNode extends Node, Linkable, Votable, VotesViewable {
+public interface CompetitionNode extends Node, Linkable, Votable, NodeVotesViewable {
 
     /**
      * Gets the number of positive votes

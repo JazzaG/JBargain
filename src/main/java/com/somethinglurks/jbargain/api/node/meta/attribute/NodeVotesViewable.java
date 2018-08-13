@@ -5,9 +5,9 @@ import com.somethinglurks.jbargain.api.node.meta.Voter;
 import java.util.List;
 
 /**
- * Represents content where the list of votes can be viewed
+ * Represents a node whose list of votes can be viewed
  */
-public interface VotesViewable {
+public interface NodeVotesViewable {
 
     /**
      * Retrieves the list of voters. This is only available if there is an authenticated user.

@@ -2,15 +2,15 @@ package com.somethinglurks.jbargain.api.node;
 
 import com.somethinglurks.jbargain.api.node.meta.attribute.Describable;
 import com.somethinglurks.jbargain.api.node.meta.attribute.Linkable;
+import com.somethinglurks.jbargain.api.node.meta.attribute.NodeVotesViewable;
 import com.somethinglurks.jbargain.api.node.meta.attribute.Votable;
-import com.somethinglurks.jbargain.api.node.meta.attribute.VotesViewable;
 
 import java.util.Date;
 
 /**
  * Represents a deal node
  */
-public interface DealNode extends Node, Linkable, Describable, Votable, VotesViewable {
+public interface DealNode extends Node, Linkable, Describable, Votable, NodeVotesViewable {
 
     /**
      * Gets the number of positive votes
