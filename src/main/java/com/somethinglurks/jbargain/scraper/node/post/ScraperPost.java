@@ -88,7 +88,7 @@ public class ScraperPost implements Post {
 
     @Override
     public String getDescription() {
-        Elements contentElements = element.select("div.node div.content");
+        Elements contentElements = element.clone().select("div.node div.content");
 
         contentElements.select(".couponcode").remove();
         return contentElements.html();
