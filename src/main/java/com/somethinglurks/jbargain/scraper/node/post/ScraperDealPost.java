@@ -81,4 +81,14 @@ public class ScraperDealPost extends ScraperPost implements DealPost {
     public Vote getUserVote() {
         return dealNode.getUserVote();
     }
+
+    @Override
+    public boolean isFreebie() {
+        return dealNode.isFreebie();
+    }
+
+    @Override
+    public List<String> getCouponCodes() {
+        return dealNode.getCouponCodes();
+    }
 }

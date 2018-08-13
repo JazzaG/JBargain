@@ -6,6 +6,7 @@ import com.somethinglurks.jbargain.api.node.meta.attribute.NodeVotesViewable;
 import com.somethinglurks.jbargain.api.node.meta.attribute.Votable;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Represents a deal node
@@ -39,5 +40,19 @@ public interface DealNode extends Node, Linkable, Describable, Votable, NodeVote
      * @return End date
      */
     Date getEndDate();
+
+    /**
+     * Gets whether this deal is a freebie
+     *
+     * @return True if this deal is a freebie, false otherwise
+     */
+    boolean isFreebie();
+
+    /**
+     * Gets the coupon codes on this deal, if any
+     *
+     * @return List of coupon codes, or empty list if no coupon codes
+     */
+    List<String> getCouponCodes();
 
 }

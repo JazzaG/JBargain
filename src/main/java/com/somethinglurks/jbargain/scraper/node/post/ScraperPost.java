@@ -13,6 +13,7 @@ import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.Date;
@@ -87,7 +88,10 @@ public class ScraperPost implements Post {
 
     @Override
     public String getDescription() {
-        return element.select("div.node div.content").html();
+        Elements contentElements = element.select("div.node div.content");
+
+        contentElements.select(".couponcode").remove();
+        return contentElements.html();
     }
 
     @Override

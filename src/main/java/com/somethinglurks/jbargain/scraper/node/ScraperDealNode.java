@@ -9,6 +9,7 @@ import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -116,6 +117,22 @@ public class ScraperDealNode extends ScraperNode implements DealNode {
         }
 
         return new NodeVotersList(id, user);
+    }
+
+    @Override
+    public boolean isFreebie() {
+        return element.selectFirst("span.nodefreebie") != null;
+    }
+
+    @Override
+    public List<String> getCouponCodes() {
+        List<String> couponCodes = new ArrayList<>();
+
+        for (Element codeElement : element.select("div.couponcode strong")) {
+            couponCodes.add(codeElement.text());
+        }
+
+        return couponCodes;
     }
 
     @Override
