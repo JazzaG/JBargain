@@ -59,4 +59,14 @@ public class OzBargainApi {
         }
     }
 
+    public static Element listCommentVotes(String commentId) {
+        String host = String.format("%s/ozbapi/comment/%s/listvotes", ScraperJBargain.HOST, commentId);
+
+        try {
+            return Jsoup.connect(host).get();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
 }

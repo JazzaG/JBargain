@@ -7,21 +7,21 @@ import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.scraper.OzBargainApi;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
+import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class ScraperComment implements Comment {
 
-    public Element element;
+    private Element element;
     private String id;
     private int level;
 
     private Type type;
-
-    private boolean hasFetchedVoteData = false;
-    private List<Voter> voters;
+    private Voters voters;
 
     public ScraperComment(Element element, String id, int level, Type type) {
         this.element = element;
@@ -30,11 +30,39 @@ public class ScraperComment implements Comment {
         this.type = type;
     }
 
-    private void fetchVoteData() {
-        if (!hasFetchedVoteData) {
-            hasFetchedVoteData = true;
+    private void fetchCommentVoters() {
+        Element votersList = OzBargainApi.listCommentVotes(getId());
+        if (votersList != null) {
+            List<Voter> positiveVoters = new ArrayList<>();
 
-            // TODO
+            // Build list of positive voters
+            for (Element voteRow : votersList.select("tbody tr")) {
+                positiveVoters.add(new Voter(
+                        new Author(
+                                voteRow.select("td:nth-child(3) a").attr("href").replaceAll("[^0-9]", ""),
+                                voteRow.select("td:nth-child(3) a").text(),
+                                voteRow.select("td:nth-child(3) img").attr("src"),
+                                new ArrayList<>()
+                        ),
+                        Vote.POSITIVE,
+                        StringToDate.parsePostDate(voteRow.selectFirst("td:last-child").text(), true)
+                ));
+            }
+
+            // Get number of negative voters
+            int negativeVoters = StringToInteger.parseSelector(votersList, "tbody tr:last-of-type");
+
+            voters = new Voters() {
+                @Override
+                public List<Voter> getPositiveVoters() {
+                    return positiveVoters;
+                }
+
+                @Override
+                public int getNumberOfNegativeVoters() {
+                    return negativeVoters;
+                }
+            };
         }
     }
 
@@ -111,14 +139,22 @@ public class ScraperComment implements Comment {
     }
 
     @Override
-    public List<Voter> getVoters() {
-        // TODO
-        fetchVoteData();
+    public Voters getVoters() {
+        if (voters == null) {
+            fetchCommentVoters();
+        }
+
         return voters;
     }
 
     @Override
     public Vote getUserVote() {
-        return null; // TODO
+        if (element.select("div.c-vote.voteup").size() == 1) {
+            return Vote.POSITIVE;
+        } else if (element.select("div.c-vote.votedown").size() == 1) {
+            return Vote.NEGATIVE;
+        } else {
+            return null;
+        }
     }
 }
