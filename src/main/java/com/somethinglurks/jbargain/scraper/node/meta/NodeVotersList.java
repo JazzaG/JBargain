@@ -39,12 +39,7 @@ public class NodeVotersList extends ArrayList<Voter> {
     }
 
     private Author createAuthor(Element voteRow) {
-        return new Author(
-                voteRow.select("a").attr("href").replaceAll("[^0-9]", ""),
-                voteRow.select("a").text(),
-                voteRow.select("img").attr("src"),
-                new ArrayList<>()
-        );
+        return new AuthorElementAdapter(voteRow);
     }
 
     private Vote determineVote(Element voteRow) {

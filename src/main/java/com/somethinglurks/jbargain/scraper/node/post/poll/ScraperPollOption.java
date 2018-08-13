@@ -3,10 +3,10 @@ package com.somethinglurks.jbargain.scraper.node.post.poll;
 import com.somethinglurks.jbargain.api.node.meta.Author;
 import com.somethinglurks.jbargain.api.node.meta.Vote;
 import com.somethinglurks.jbargain.api.node.post.poll.PollOption;
+import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class ScraperPollOption implements PollOption {
@@ -23,12 +23,7 @@ public class ScraperPollOption implements PollOption {
 
         // Set author and date if item was suggested by another user
         if (element.select("div.suggest").size() == 1) {
-            author = new Author(
-                    element.select("div.suggest strong a").attr("href").replaceAll("[^0-9]", ""),
-                    element.select("div.suggest strong a").text(),
-                    "",
-                    new ArrayList<>()
-            );
+            author = new AuthorElementAdapter(element.selectFirst("div.suggest"));
 
             date = StringToDate.parsePostDate(element.select("div.suggest a").text(), true);
         } else {

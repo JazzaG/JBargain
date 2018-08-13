@@ -5,7 +5,7 @@ import com.somethinglurks.jbargain.api.node.meta.Vote;
 import com.somethinglurks.jbargain.api.node.meta.Voter;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.scraper.OzBargainApi;
-import com.somethinglurks.jbargain.scraper.node.meta.Flags;
+import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
@@ -67,12 +67,10 @@ public class ScraperComment implements Comment {
 
     @Override
     public Author getAuthor() {
-        return new Author(
-                element.select("div.submitted a").attr("href").replaceAll("[^0-9]", ""),
-                element.select("div.submitted strong").text(),
-                element.select("img.gravatar").attr("src"),
-                Flags.createFromElements(element.select("div.submitted span"))
-        );
+        return new AuthorElementAdapter(element,
+                "div.submitted a",
+                "img.gravatar",
+                "div.submitted span");
     }
 
     @Override
@@ -109,12 +107,10 @@ public class ScraperComment implements Comment {
         // Build list of positive voters
         for (Element voteRow : votersList.select("tbody tr")) {
             positiveVoters.add(new Voter(
-                    new Author(
-                            voteRow.select("td:nth-child(3) a").attr("href").replaceAll("[^0-9]", ""),
-                            voteRow.select("td:nth-child(3) a").text(),
-                            voteRow.select("td:nth-child(3) img").attr("src"),
-                            new ArrayList<>()
-                    ),
+                    new AuthorElementAdapter(voteRow,
+                            "td:nth-child(3) a",
+                            "td:nth-child(3) img",
+                            null),
                     Vote.POSITIVE,
                     StringToDate.parsePostDate(voteRow.selectFirst("td:last-child").text(), true)
             ));

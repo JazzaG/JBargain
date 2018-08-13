@@ -6,6 +6,7 @@ import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.scraper.ScraperJBargain;
+import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
 import com.somethinglurks.jbargain.scraper.node.post.comment.CommentIterator;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
@@ -65,12 +66,10 @@ public class ScraperPost implements Post {
 
     @Override
     public Author getAuthor() {
-        return new Author(
-                element.select("div.submitted a").first().attr("href").replaceAll("[^0-9]", ""),
-                element.select("div.submitted a").first().text(),
-                element.select("div.n-left img.gravatar").attr("src"),
-                Flags.createFromElements(element.select("div.submitted span"))
-        );
+        return new AuthorElementAdapter(element,
+                "div.submitted a",
+                "div.n-left img.gravatar",
+                "div.submitted span");
     }
 
     @Override

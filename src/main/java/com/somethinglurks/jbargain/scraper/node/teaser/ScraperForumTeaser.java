@@ -4,13 +4,13 @@ import com.somethinglurks.jbargain.api.node.meta.Author;
 import com.somethinglurks.jbargain.api.node.meta.Flag;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.teaser.ForumTeaser;
+import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,12 +22,7 @@ public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
 
     @Override
     public Author getLastReplyAuthor() {
-        return new Author(
-                element.select("td.last-reply a").attr("href").replaceAll("[^0-9]", ""),
-                element.select("td.last-reply a").text(),
-                element.select("td.last-reply img.usericon").attr("src"),
-                new ArrayList<>()
-        );
+        return new AuthorElementAdapter(element.selectFirst("td.last-reply"));
     }
 
     @Override
@@ -47,12 +42,7 @@ public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
 
     @Override
     public Author getAuthor() {
-        return new Author(
-                element.select("td.created a").attr("href").replaceAll("[^0-9]", ""),
-                element.select("td.created a").text(),
-                element.select("td.created img.usericon").attr("src"),
-                new ArrayList<>()
-        );
+        return new AuthorElementAdapter(element.selectFirst("td.created"));
     }
 
     @Override

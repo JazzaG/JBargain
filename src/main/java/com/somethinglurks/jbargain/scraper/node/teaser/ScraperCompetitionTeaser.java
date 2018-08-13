@@ -2,9 +2,12 @@ package com.somethinglurks.jbargain.scraper.node.teaser;
 
 import com.somethinglurks.jbargain.api.node.meta.*;
 import com.somethinglurks.jbargain.api.node.teaser.CompetitionTeaser;
+import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
+import com.somethinglurks.jbargain.scraper.node.meta.NodeVotersList;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
+import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
 
 import java.util.Date;
@@ -28,12 +31,10 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
 
     @Override
     public Author getAuthor() {
-        return new Author(
-                element.select("div.submitted strong a").attr("href").replaceAll("[^0-9]", ""),
-                element.select("div.submitted strong a").text(),
-                element.select("div.n-left img.gravatar").attr("src"),
-                Flags.createFromElements(element.select("div.submitted span"))
-        );
+        return new AuthorElementAdapter(element,
+                "div.submitted strong a",
+                "div.n-left img.gravatar",
+                "div.submitted span");
     }
 
     @Override
@@ -83,23 +84,17 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
 
     @Override
     public int getNumberOfComments() {
-        String value = element.select("ul.links li:nth-child(1)").text();
-
-        return Integer.parseInt(value);
+        return StringToInteger.parseSelector(element, "ul.links li:nth-child(1)");
     }
 
     @Override
     public int getNumberOfEntrants() {
-        String value = element.select("ul.links li:nth-child(2)").text();
-
-        return Integer.parseInt(value);
+        return StringToInteger.parseSelector(element, "ul.links li:nth-child(2)");
     }
 
     @Override
     public int getNumberOfWinners() {
-        String value = element.select("ul.links li:nth-child(3)").text();
-
-        return Integer.parseInt(value);
+        return StringToInteger.parseSelector(element, "ul.links li:nth-child(3)");
     }
 
     @Override
@@ -114,14 +109,16 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
 
     @Override
     public int getPositiveVotes() {
-        String value = element.select("span.nvb.voteup").text();
-
-        return Integer.parseInt(value);
+        return StringToInteger.parseSelector(element, "span.nvb.voteup");
     }
 
     @Override
     public List<Voter> getVoters() {
-        return null; // TODO
+        if (user == null) {
+            return null;
+        }
+
+        return new NodeVotersList(getId(), user);
     }
 
     @Override

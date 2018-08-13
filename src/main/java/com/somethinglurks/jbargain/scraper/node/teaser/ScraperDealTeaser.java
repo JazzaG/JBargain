@@ -1,10 +1,10 @@
 package com.somethinglurks.jbargain.scraper.node.teaser;
 
+import com.somethinglurks.jbargain.api.node.DealNode;
 import com.somethinglurks.jbargain.api.node.meta.*;
 import com.somethinglurks.jbargain.api.node.teaser.DealTeaser;
-import com.somethinglurks.jbargain.scraper.node.DealDateWrapper;
+import com.somethinglurks.jbargain.scraper.node.ScraperDealNode;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
-import com.somethinglurks.jbargain.scraper.node.meta.VotersList;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import org.jsoup.nodes.Element;
@@ -14,11 +14,11 @@ import java.util.List;
 
 public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
 
-    private DealDateWrapper dateWrapper;
+    private DealNode dealNode;
 
     public ScraperDealTeaser(Element element, ScraperUser user) {
         super(element, user);
-        this.dateWrapper = new DealDateWrapper(element);
+        this.dealNode = new ScraperDealNode(element, getId(), user);
     }
 
     @Override
@@ -28,12 +28,12 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
 
     @Override
     public Date getStartDate() {
-        return dateWrapper.getStartDate();
+        return dealNode.getStartDate();
     }
 
     @Override
     public Date getEndDate() {
-        return dateWrapper.getEndDate();
+        return dealNode.getEndDate();
     }
 
     @Override
@@ -43,12 +43,7 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
 
     @Override
     public Author getAuthor() {
-        return new Author(
-                element.select("div.submitted strong a").attr("href").replaceAll("[^0-9]", ""),
-                element.select("div.submitted strong a").text(),
-                element.select("div.n-left img.gravatar").attr("src"),
-                Flags.createFromElements(element.select("div.submitted span"))
-        );
+        return dealNode.getAuthor();
     }
 
     @Override
@@ -83,47 +78,31 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
 
     @Override
     public String getWebsite() {
-        return element.select("span.via a").text();
+        return dealNode.getWebsite();
     }
 
     @Override
     public String getThumbnailUrl() {
-        return element.select("div.foxshot-conainer img").attr("src");
+        return dealNode.getThumbnailUrl();
     }
 
     @Override
     public int getPositiveVotes() {
-        String value = element.select("span.nvb.voteup").text();
-
-        return Integer.parseInt(value);
+        return dealNode.getPositiveVotes();
     }
 
     @Override
     public int getNegativeVotes() {
-        String value = element.select("span.nvb.votedown").text();
-
-        return Integer.parseInt(value);
+        return dealNode.getNegativeVotes();
     }
 
     @Override
     public List<Voter> getVoters() {
-        if (this.user == null) {
-            return null;
-        }
-
-        return new VotersList(getId(), user);
+        return dealNode.getVoters();
     }
 
     @Override
     public Vote getUserVote() {
-        if (element.select("div.n-vote.voteup").size() == 1) {
-            return Vote.POSITIVE;
-        }
-
-        if (element.select("div.n-vote votedown").size() == 1) {
-            return Vote.NEGATIVE;
-        }
-
-        return null;
+        return dealNode.getUserVote();
     }
 }

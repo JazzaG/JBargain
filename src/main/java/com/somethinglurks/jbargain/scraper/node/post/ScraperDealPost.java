@@ -1,11 +1,11 @@
 package com.somethinglurks.jbargain.scraper.node.post;
 
+import com.somethinglurks.jbargain.api.node.DealNode;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.meta.Vote;
 import com.somethinglurks.jbargain.api.node.meta.Voter;
 import com.somethinglurks.jbargain.api.node.post.DealPost;
-import com.somethinglurks.jbargain.scraper.node.DealDateWrapper;
-import com.somethinglurks.jbargain.scraper.node.meta.VotersList;
+import com.somethinglurks.jbargain.scraper.node.ScraperDealNode;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
@@ -16,11 +16,11 @@ import java.util.List;
 
 public class ScraperDealPost extends ScraperPost implements DealPost {
 
-    private DealDateWrapper dateWrapper;
+    private DealNode dealNode;
 
     public ScraperDealPost(Element element, ScraperUser user) {
         super(element, user);
-        this.dateWrapper = new DealDateWrapper(element);
+        this.dealNode = new ScraperDealNode(element, getId(), user);
     }
 
     @Override
@@ -39,22 +39,22 @@ public class ScraperDealPost extends ScraperPost implements DealPost {
 
     @Override
     public Date getStartDate() {
-        return dateWrapper.getStartDate();
+        return dealNode.getStartDate();
     }
 
     @Override
     public Date getEndDate() {
-        return dateWrapper.getEndDate();
+        return dealNode.getEndDate();
     }
 
     @Override
     public String getWebsite() {
-        return element.select("span.via a").text();
+        return dealNode.getWebsite();
     }
 
     @Override
     public String getThumbnailUrl() {
-        return element.select("div.foxshot-container img").attr("src");
+        return dealNode.getThumbnailUrl();
     }
 
     @Override
@@ -64,33 +64,21 @@ public class ScraperDealPost extends ScraperPost implements DealPost {
 
     @Override
     public int getPositiveVotes() {
-        return StringToInteger.parseSelector(element, "div.n-vote span.voteup");
+        return dealNode.getPositiveVotes();
     }
 
     @Override
     public int getNegativeVotes() {
-        return StringToInteger.parseSelector(element, "div.n-vote span.votedown");
+        return dealNode.getNegativeVotes();
     }
 
     @Override
     public List<Voter> getVoters() {
-        if (this.user == null) {
-            return null;
-        }
-
-        return new VotersList(getId(), user);
+        return dealNode.getVoters();
     }
 
     @Override
     public Vote getUserVote() {
-        if (element.select("div.n-vote.voteup").size() == 1) {
-            return Vote.POSITIVE;
-        }
-
-        if (element.select("div.n-vote votedown").size() == 1) {
-            return Vote.NEGATIVE;
-        }
-
-        return null;
+        return dealNode.getUserVote();
     }
 }
