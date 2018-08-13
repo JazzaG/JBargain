@@ -5,6 +5,7 @@ import com.somethinglurks.jbargain.api.node.meta.Vote;
 import com.somethinglurks.jbargain.api.node.post.poll.PollOption;
 import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
+import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
 
 import java.util.Date;
@@ -13,13 +14,15 @@ public class ScraperPollOption implements PollOption {
 
     private Element element;
     private String nodeId;
+    private boolean hidden;
 
     private Author author;
     private Date date;
 
-    public ScraperPollOption(Element element, String nodeId) {
+    public ScraperPollOption(Element element, String nodeId, boolean hidden) {
         this.element = element;
         this.nodeId = nodeId;
+        this.hidden = hidden;
 
         // Set author and date if item was suggested by another user
         if (element.select("div.suggest").size() == 1) {
@@ -53,8 +56,17 @@ public class ScraperPollOption implements PollOption {
     }
 
     @Override
+    public boolean isScoreHidden() {
+        return hidden;
+    }
+
+    @Override
     public int getScore() {
-        return Integer.parseInt(element.select("div.n-vote > span > span").text());
+        if (isScoreHidden()) {
+            return 0;
+        } else {
+            return StringToInteger.parseSelector(element, "div.n-vote > span > span");
+        }
     }
 
     @Override

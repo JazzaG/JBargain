@@ -19,10 +19,12 @@ public class ScraperForumPost extends ScraperPost implements ForumPost {
 
     @Override
     public List<PollOption> getPollOptions() {
+        boolean scoresHidden = element.select("div#poll li div.n-vote").text().contains("?");
+
         List<PollOption> pollOptions = new ArrayList<>();
 
         for (Element item : element.select("div#poll li")) {
-            pollOptions.add(new ScraperPollOption(item, this.getId()));
+            pollOptions.add(new ScraperPollOption(item, this.getId(), scoresHidden));
         }
 
         return pollOptions;

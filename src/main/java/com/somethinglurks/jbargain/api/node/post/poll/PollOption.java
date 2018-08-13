@@ -19,6 +19,13 @@ public interface PollOption extends Describable, Votable {
     String getNodeId();
 
     /**
+     * Gets whether the score is hidden.
+     *
+     * @return True if score is hidden, false if not
+     */
+    boolean isScoreHidden();
+
+    /**
      * Gets the score of this item, which is equal to the positive votes minus the negative votes
      *
      * @return Score
