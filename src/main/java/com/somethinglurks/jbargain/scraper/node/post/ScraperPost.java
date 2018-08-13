@@ -32,6 +32,15 @@ public class ScraperPost implements Post {
         this.user = user;
     }
 
+    public Element getElement() {
+        return element;
+    }
+
+    @Override
+    public boolean isDiscussionClosed() {
+        return element.selectFirst("#coment span.tagger.expired") != null;
+    }
+
     @Override
     public Iterator<Comment> getComments(boolean ignoreUnpublishedComments) {
         Element targetElement = this.element;

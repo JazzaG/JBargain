@@ -5,8 +5,10 @@ import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.api.user.ReplyBuilder;
 import com.somethinglurks.jbargain.api.user.exception.ReplyException;
 import com.somethinglurks.jbargain.scraper.ScraperJBargain;
+import com.somethinglurks.jbargain.scraper.node.post.ScraperPost;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
@@ -20,7 +22,7 @@ public class ScraperReplyBuilder implements ReplyBuilder {
     private String content;
     private String pollSuggestion;
 
-    private boolean isAssociated;
+    private boolean isAssociated = false;
 
     public ScraperReplyBuilder(ScraperUser user, Post post) {
         this.user = user;
@@ -32,42 +34,30 @@ public class ScraperReplyBuilder implements ReplyBuilder {
         this.comment = comment;
     }
 
-    private void replyToPost() throws ReplyException {
-        // TODO
-    }
-
-    private void replyToComment() throws ReplyException {
+    private void sendReply(String formAction, String formToken) throws ReplyException {
         try {
-            // Load reply form to get token
+            // Submit reply
             Connection connection = Jsoup
-                    .connect(ScraperJBargain.HOST + "/ozbapi/comment/" + comment.getId() + "/replyform")
-                    .cookies(this.user.getCookies())
-                    .method(Connection.Method.GET);
-
-            Connection.Response formResponse = connection.execute();
-
-            // Fetch token from form
-            String token = formResponse.parse().select("input#edit-form_token").val();
-
-            // Fetch endpoint from form
-            String endpoint = formResponse.parse().select("form").attr("action");
-
-            // Submit form
-            Connection.Response submitResponse = connection
-                    .data("edit[comment]", this.content)
-                    .data("edit[rep_flag]", this.isAssociated ? "1" : "0")
-                    .data("edit[form_token]", token)
-                    .data("edit[form_id]", "comment_form")
-                    .data("op", "Post comment")
+                    .connect(ScraperJBargain.HOST + formAction)
+                    .cookies(user.getCookies())
                     .method(Connection.Method.POST)
-                    .url(ScraperJBargain.HOST + endpoint)
-                    .execute();
+                    .data("edit[comment]", content)
+                    .data("edit[rep_flag]", isAssociated ? "1" : "0")
+                    .data("edit[form_token]", formToken)
+                    .data("edit[form_id]", "comment_form");
 
-            // Validate
-            // TODO:
+            // Add poll suggestion if present
+            if (pollSuggestion != null) {
+                connection.data("edit[suggest]", pollSuggestion);
+            }
 
-        } catch (IOException ignored) {
-
+            // Throw exception if error message is found
+            Element errorElement;
+            if ((errorElement = connection.execute().parse().selectFirst("div#content div.messages.error")) != null) {
+                throw new ReplyException(errorElement.text());
+            }
+        } catch (IOException e) {
+            throw new ReplyException(e.getMessage());
         }
     }
 
@@ -91,11 +81,33 @@ public class ScraperReplyBuilder implements ReplyBuilder {
 
     @Override
     public void reply() throws ReplyException {
+        String formAction;
+        String formToken;
+
         // Determine how to reply to the content
         if (post != null) {
-            replyToPost();
+            formAction = ((ScraperPost) post).getElement().select("form#comment_form").attr("action");
+            formToken = ((ScraperPost) post).getElement().select("input#edit-form_token").val();
         } else if (comment != null) {
-            replyToComment();
+            try {
+                // Load reply form to get token
+                Element commentFormResponse = Jsoup
+                        .connect(ScraperJBargain.HOST + "/ozbapi/comment/" + comment.getId() + "/replyform")
+                        .cookies(this.user.getCookies())
+                        .method(Connection.Method.GET)
+                        .execute()
+                        .parse();
+
+                formAction = commentFormResponse.select("form").attr("action");
+                formToken = commentFormResponse.select("input#edit-form_token").val();
+            } catch (IOException ex) {
+                throw new ReplyException(ex.getMessage());
+            }
+        } else {
+            throw new NullPointerException("Target to reply to was null");
         }
+
+        // Submit reply
+        sendReply(formAction, formToken);
     }
 }
