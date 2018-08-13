@@ -21,49 +21,12 @@ public class ScraperComment implements Comment {
     private int level;
 
     private Type type;
-    private Voters voters;
 
     public ScraperComment(Element element, String id, int level, Type type) {
         this.element = element;
         this.id = id;
         this.level = level;
         this.type = type;
-    }
-
-    private void fetchCommentVoters() {
-        Element votersList = OzBargainApi.listCommentVotes(getId());
-        if (votersList != null) {
-            List<Voter> positiveVoters = new ArrayList<>();
-
-            // Build list of positive voters
-            for (Element voteRow : votersList.select("tbody tr")) {
-                positiveVoters.add(new Voter(
-                        new Author(
-                                voteRow.select("td:nth-child(3) a").attr("href").replaceAll("[^0-9]", ""),
-                                voteRow.select("td:nth-child(3) a").text(),
-                                voteRow.select("td:nth-child(3) img").attr("src"),
-                                new ArrayList<>()
-                        ),
-                        Vote.POSITIVE,
-                        StringToDate.parsePostDate(voteRow.selectFirst("td:last-child").text(), true)
-                ));
-            }
-
-            // Get number of negative voters
-            int negativeVoters = StringToInteger.parseSelector(votersList, "tbody tr:last-of-type");
-
-            voters = new Voters() {
-                @Override
-                public List<Voter> getPositiveVoters() {
-                    return positiveVoters;
-                }
-
-                @Override
-                public int getNumberOfNegativeVoters() {
-                    return negativeVoters;
-                }
-            };
-        }
     }
 
     @Override
@@ -140,11 +103,37 @@ public class ScraperComment implements Comment {
 
     @Override
     public Voters getVoters() {
-        if (voters == null) {
-            fetchCommentVoters();
+        Element votersList = OzBargainApi.listCommentVotes(getId());
+        List<Voter> positiveVoters = new ArrayList<>();
+
+        // Build list of positive voters
+        for (Element voteRow : votersList.select("tbody tr")) {
+            positiveVoters.add(new Voter(
+                    new Author(
+                            voteRow.select("td:nth-child(3) a").attr("href").replaceAll("[^0-9]", ""),
+                            voteRow.select("td:nth-child(3) a").text(),
+                            voteRow.select("td:nth-child(3) img").attr("src"),
+                            new ArrayList<>()
+                    ),
+                    Vote.POSITIVE,
+                    StringToDate.parsePostDate(voteRow.selectFirst("td:last-child").text(), true)
+            ));
         }
 
-        return voters;
+        // Get number of negative voters
+        int negativeVoters = StringToInteger.parseSelector(votersList, "tbody tr:last-of-type");
+
+        return new Voters() {
+            @Override
+            public List<Voter> getPositiveVoters() {
+                return positiveVoters;
+            }
+
+            @Override
+            public int getNumberOfNegativeVoters() {
+                return negativeVoters;
+            }
+        };
     }
 
     @Override
