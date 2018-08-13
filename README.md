@@ -61,8 +61,9 @@ user.vote(comment, Vote.POSITIVE);
 
 ### Initial release
  - [ ] Complete the implementation of existing interfaces
- - [ ] Handle different types of comments (moderator, unpublished)
+ - [x] Handle different types of comments (moderator, unpublished)
  - [x] Modify User.vote() to accept a Votable instance
+ - [ ] Classifieds support
  - [ ] Accept post submissions
  - [ ] User profile support
  - [ ] Create methods to fetch post categories as Tag instances (i.e. forum categories, deal categories, 'New Deals', 
@@ -76,6 +77,7 @@ user.vote(comment, Vote.POSITIVE);
  - [ ] Support for unpublished submissions
  - [ ] Account management
  - [ ] View revision history of submissions
+ - [ ] Support for referrals
  - [ ] Support for user notifications
  - [ ] Support for reports
  - [ ] Support for bookmarks
