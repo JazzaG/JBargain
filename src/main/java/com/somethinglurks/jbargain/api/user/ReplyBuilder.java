@@ -1,5 +1,7 @@
 package com.somethinglurks.jbargain.api.user;
 
+import com.somethinglurks.jbargain.api.user.exception.ReplyException;
+
 /**
  * Constructs a reply to a post or comment
  */
@@ -31,8 +33,9 @@ public interface ReplyBuilder {
 
     /**
      * Submits the reply
+     *
+     * @throws ReplyException if something goes wrong
      */
-    // TODO: Throw an exception if something goes wrong
-    void reply();
+    void reply() throws ReplyException;
 
 }

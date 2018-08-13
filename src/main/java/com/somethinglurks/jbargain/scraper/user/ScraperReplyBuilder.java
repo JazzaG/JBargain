@@ -3,6 +3,7 @@ package com.somethinglurks.jbargain.scraper.user;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.api.user.ReplyBuilder;
+import com.somethinglurks.jbargain.api.user.exception.ReplyException;
 import com.somethinglurks.jbargain.scraper.ScraperJBargain;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -31,11 +32,11 @@ public class ScraperReplyBuilder implements ReplyBuilder {
         this.comment = comment;
     }
 
-    private void replyToPost() {
-
+    private void replyToPost() throws ReplyException {
+        // TODO
     }
 
-    private void replyToComment() {
+    private void replyToComment() throws ReplyException {
         try {
             // Load reply form to get token
             Connection connection = Jsoup
@@ -89,7 +90,7 @@ public class ScraperReplyBuilder implements ReplyBuilder {
     }
 
     @Override
-    public void reply() {
+    public void reply() throws ReplyException {
         // Determine how to reply to the content
         if (post != null) {
             replyToPost();
