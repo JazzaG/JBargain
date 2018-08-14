@@ -66,7 +66,6 @@ user.vote(comment, Vote.POSITIVE);
  - [ ] Classifieds support
  - [ ] Accept post submissions
  - [ ] User profile support 
- etc)
  - [x] Explore options to maintain granularity of interfaces where appropriate (e.g. Votable interface; not everything
   that can be voted on can be voted negatively, the list of voters cannot be retrieved, etc)
  - [ ] Ensure Android compatibility
