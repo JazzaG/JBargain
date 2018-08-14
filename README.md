@@ -60,7 +60,7 @@ user.vote(comment, Vote.POSITIVE);
 ## Milestones
 
 ### Initial release
- - [ ] Complete the implementation of existing interfaces
+ - [x] Complete the implementation of existing interfaces
  - [x] Handle different types of comments (moderator, unpublished)
  - [x] Modify User.vote() to accept a Votable instance
  - [ ] Classifieds support
