@@ -13,8 +13,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TeaserIterator implements Iterator<Teaser> {
 
@@ -104,9 +102,11 @@ public class TeaserIterator implements Iterator<Teaser> {
     private class ForumFactory implements Factory {
         @Override
         public Teaser create(Element element, ScraperUser user) {
-            // We are within the category if the endpoint is a number, i.e. /forum/30
-            Matcher matcher = Pattern.compile("/forum/[0-9]+").matcher(tag.getEndpoint());
-            boolean withinCategory = matcher.find();
+            // We are within the category if the parent table has class "forum-topics"
+            boolean withinCategory = element
+                    .parent() // <tbody>
+                    .parent() // <table>
+                    .hasClass("forum-topics");
 
             return new ScraperForumTeaser(element, user, withinCategory, tag);
         }
