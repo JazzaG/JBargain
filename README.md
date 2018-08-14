@@ -65,14 +65,14 @@ user.vote(comment, Vote.POSITIVE);
  - [x] Modify User.vote() to accept a Votable instance
  - [ ] Classifieds support
  - [ ] Accept post submissions
- - [ ] User profile support
- - [ ] Create methods to fetch post categories as Tag instances (i.e. forum categories, deal categories, 'New Deals', 
+ - [ ] User profile support 
  etc)
  - [x] Explore options to maintain granularity of interfaces where appropriate (e.g. Votable interface; not everything
   that can be voted on can be voted negatively, the list of voters cannot be retrieved, etc)
  - [ ] Ensure Android compatibility
 
 ### Some time in the future
+ - [ ] Create methods to fetch post categories as Tag instances (i.e. forum categories, deal categories, 'New Deals',
  - [ ] Support for other methods of user authentication
  - [ ] Support for unpublished submissions
  - [ ] Account management
