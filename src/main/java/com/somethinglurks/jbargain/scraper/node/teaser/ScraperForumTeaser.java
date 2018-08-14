@@ -19,10 +19,6 @@ public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
     private boolean withinCategory;
     private Tag category;
 
-//    public ScraperForumTeaser(Element element, ScraperUser user) {
-//        super(element, user);
-//    }
-
     public ScraperForumTeaser(Element element, ScraperUser user, boolean withinCategory, Tag category) {
         super(element, user);
 
