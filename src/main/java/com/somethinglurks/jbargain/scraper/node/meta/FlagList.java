@@ -9,6 +9,8 @@ import java.util.ArrayList;
 public class FlagList extends ArrayList<Flag> {
     
     private static final Object[][] OPTIONS = {
+            { Flag.STICKY, "fa-thumb-tack", "" },
+
             { Flag.AUTHOR_LEARNER, "plate learner", "" },
             { Flag.AUTHOR_RED_PLATE, "plate redp", "" },
             { Flag.AUTHOR_GREEN_PLATE, "plate greenp", "" },
@@ -17,13 +19,16 @@ public class FlagList extends ArrayList<Flag> {
             { Flag.AUTHOR_EMPLOYEE, "role storerep", "Employee" },
             { Flag.AUTHOR_REFERRER, "role referrer", "" },
             { Flag.AUTHOR_THIRD_PARTY, "role referrer", "Third Party" },
-        
+            { Flag.AUTHOR_MODERATOR, "role moderator", "Moderator" },
+            { Flag.AUTHOR_VOTED_POSITIVE, "cvb voteup", "" },
+            { Flag.AUTHOR_VOTED_NEGATIVE, "cvb votedown", "" },
+
             { Flag.DEAL_EXPIRED, "tagger expired", "EXPIRED" },
             { Flag.DEAL_OUT_OF_STOCK, "tagger expired", "OUT OF STOCK" },
             { Flag.DEAL_TARGETED, "tagger targeted", "TARGETED" },
             { Flag.DEAL_UPCOMING, "tagger upcoming", "" },
         
-            { Flag.FORUM_STICKY, "forum-sticky", "" },
+            { Flag.FORUM_CLOSED, "forum-close", "" },
             { Flag.FORUM_POLL, "forum-poll", "" },
             { Flag.FORUM_RESOLVED, "tagger resolved", "" },
         
@@ -44,7 +49,7 @@ public class FlagList extends ArrayList<Flag> {
                 // Find by class
                 if (element.className().contains(cssClass)) {
                     // Match by text if exists
-                    if (!element.text().equalsIgnoreCase(text)) {
+                    if (!text.equals("") && !element.text().equalsIgnoreCase(text)) {
                         continue;
                     }
                     
