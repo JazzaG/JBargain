@@ -36,7 +36,7 @@ public class OzBargainApi {
                     .cookies(user.getCookies())
                     .requestBody(data)
                     .header("Content-Type", "application/json")
-                    .header("Accept", "applicatin/json")
+                    .header("Accept", "application/json")
                     .followRedirects(false)
                     .ignoreContentType(true)
                     .method(Connection.Method.POST)

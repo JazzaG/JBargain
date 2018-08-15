@@ -22,7 +22,7 @@ public interface CompetitionPost extends Post, CompetitionNode {
     String getPrizeDescription();
 
     /**
-     * Gets the URL to the terms and conditiosn page
+     * Gets the URL to the terms and conditions page
      *
      * @return Terms and conditions URL
      */

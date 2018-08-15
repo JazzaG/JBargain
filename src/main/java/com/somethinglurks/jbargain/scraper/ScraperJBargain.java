@@ -55,8 +55,8 @@ public class ScraperJBargain implements JBargain {
                 return new ScraperUser(login.cookies());
             }
 
-        } catch (IOException ignored) {
-            throw new AuthenticationException(ignored.getMessage());
+        } catch (IOException ex) {
+            throw new AuthenticationException(ex.getMessage());
         }
     }
 
