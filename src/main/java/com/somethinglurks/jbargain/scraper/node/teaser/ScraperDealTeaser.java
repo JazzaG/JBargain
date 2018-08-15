@@ -7,7 +7,9 @@ import com.somethinglurks.jbargain.scraper.node.ScraperDealNode;
 import com.somethinglurks.jbargain.scraper.node.meta.Flags;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
+import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.Date;
 import java.util.List;
@@ -53,9 +55,11 @@ public class ScraperDealTeaser extends ScraperTeaser implements DealTeaser {
 
     @Override
     public int getNumberOfComments() {
-        String value = element.select("div.links ul li:nth-child(1)").text();
+        // Remove the 'new' marker
+        Elements repliesElement = element.clone().select("div.links ul li:nth-child(1)");
+        repliesElement.select("span.marker").remove();
 
-        return Integer.parseInt(value);
+        return StringToInteger.parseSelector(repliesElement.first(), "*");
     }
 
     @Override

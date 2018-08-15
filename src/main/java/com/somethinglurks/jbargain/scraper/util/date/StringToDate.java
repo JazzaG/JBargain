@@ -14,13 +14,53 @@ public class StringToDate {
     }
 
     /**
-     * Parses a date string in the format of dd/mm/yyyy - hh:mm
+     * Parses the post date
      *
      * @param string Date string
      * @param includeTime Flag to indicate if string contains a time
      * @return Date object, or null if string is an incorrect format
      */
     public static Date parsePostDate(String string, boolean includeTime) {
+        // Determine how to parse the date
+        Matcher matcher = Pattern.compile("[0-9]+ min ago").matcher(string);
+        if (matcher.find()) {
+            return parseRelativePostDate(string);
+        } else {
+            return parseFormattedPostDate(string, includeTime);
+        }
+    }
+
+    /**
+     * Parses a relative post date, i.e "15 hours 6 min ago"
+     *
+     * @param string Date string
+     * @return Date object, or null if string did not contain a relative post date
+     */
+    public static Date parseRelativePostDate(String string) {
+        Matcher matcher = Pattern.compile("(?:([0-9]+) hour[s]? )?(?:([0-9]+) min)").matcher(string);
+
+        if (!matcher.find()) {
+            return null;
+        }
+
+        int hoursAgo = matcher.group(1) == null ? 0 : Integer.parseInt(matcher.group(1)); // hours may not be present
+        int minutesAgo = Integer.parseInt(matcher.group(2));
+
+        long now = System.currentTimeMillis();
+        now -= hoursAgo * (1000 * 60 * 60); // subtract hours in ms
+        now -= minutesAgo * (1000 * 60); // subtract minutes in ms
+
+        return new Date(now);
+    }
+
+    /**
+     * Parses a post date in the format of dd/mm/yyyy - hh:mm
+     *
+     * @param string Date string
+     * @param includeTime Flag to indicate if the date string contains the time
+     * @return Date object, or null if the date could not be found in the string
+     */
+    public static Date parseFormattedPostDate(String string, boolean includeTime) {
         // Grab date values from string
         Pattern pattern = Pattern.compile("([0-9]{2}/[0-9]{2}/[0-9]{4} - [0-9]{2}:[0-9]{2})");
         Matcher matcher = pattern.matcher(string);
@@ -30,7 +70,7 @@ public class StringToDate {
         }
 
         // Build date object
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy - H:m");
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy" + (includeTime ? " - H:m" : ""));
 
         try {
             return format.parse(matcher.group(1));

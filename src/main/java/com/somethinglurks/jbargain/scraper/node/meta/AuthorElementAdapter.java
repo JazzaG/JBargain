@@ -17,7 +17,7 @@ public class AuthorElementAdapter extends Author {
     public AuthorElementAdapter(Element element, String anchorSelector, String imgSelector, String flagSelector) {
         super(null, null, null, null);
 
-        this.id = element.select(anchorSelector).attr("href").replace("[^0-9]", "");
+        this.id = element.select(anchorSelector).attr("href").replaceAll("[^0-9]", "");
         this.username = element.select(anchorSelector).text();
         this.avatarUrl = element.select(imgSelector).attr("src");
 

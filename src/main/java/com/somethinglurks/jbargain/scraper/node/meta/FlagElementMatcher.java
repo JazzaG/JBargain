@@ -5,7 +5,6 @@ import org.jsoup.nodes.Element;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class FlagElementMatcher {
 
@@ -40,7 +39,7 @@ public class FlagElementMatcher {
             if (option.cssClass.contains(element.className())) {
                 // Also match by text if exists
                 if (!option.elementText.isEmpty()) {
-                    if (!Pattern.compile(option.elementText).matcher(element.text()).find()) {
+                    if (!option.elementText.equalsIgnoreCase(element.text())) {
                         continue;
                     }
                 }
