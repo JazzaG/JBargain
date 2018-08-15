@@ -22,7 +22,7 @@ public class AuthorElementAdapter extends Author {
         this.avatarUrl = element.select(imgSelector).attr("src");
 
         if (flagSelector != null) {
-            this.flags = Flags.createFromElements(element.select(flagSelector));
+            this.flags = new FlagList(element.select(flagSelector));
         } else {
             this.flags = new ArrayList<>();
         }

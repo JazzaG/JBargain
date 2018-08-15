@@ -3,8 +3,8 @@ package com.somethinglurks.jbargain.scraper.node.teaser;
 import com.somethinglurks.jbargain.api.node.meta.*;
 import com.somethinglurks.jbargain.api.node.teaser.CompetitionTeaser;
 import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
-import com.somethinglurks.jbargain.scraper.node.meta.Flags;
-import com.somethinglurks.jbargain.scraper.node.meta.NodeVotersList;
+import com.somethinglurks.jbargain.scraper.node.meta.FlagList;
+import com.somethinglurks.jbargain.scraper.node.meta.NodeVoterList;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
@@ -52,7 +52,7 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
 
     @Override
     public List<Flag> getFlags() {
-        return Flags.createFromElements(element.select("h2.title span"));
+        return new FlagList(element.select("h2.title span"));
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ScraperCompetitionTeaser extends ScraperTeaser implements Competiti
             return null;
         }
 
-        return new NodeVotersList(getId(), user);
+        return new NodeVoterList(getId(), user);
     }
 
     @Override

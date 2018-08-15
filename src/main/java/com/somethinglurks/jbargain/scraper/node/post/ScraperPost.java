@@ -7,7 +7,7 @@ import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.post.comment.Comment;
 import com.somethinglurks.jbargain.scraper.ScraperJBargain;
 import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
-import com.somethinglurks.jbargain.scraper.node.meta.Flags;
+import com.somethinglurks.jbargain.scraper.node.meta.FlagList;
 import com.somethinglurks.jbargain.scraper.node.post.comment.CommentIterator;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
@@ -105,6 +105,6 @@ public class ScraperPost implements Post {
 
     @Override
     public List<Flag> getFlags() {
-        return Flags.createFromElements(element.select("h1.title span"));
+        return new FlagList(element.select("h1.title span"));
     }
 }

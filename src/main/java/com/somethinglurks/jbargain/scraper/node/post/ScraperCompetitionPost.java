@@ -3,7 +3,7 @@ package com.somethinglurks.jbargain.scraper.node.post;
 import com.somethinglurks.jbargain.api.node.meta.Vote;
 import com.somethinglurks.jbargain.api.node.meta.Voter;
 import com.somethinglurks.jbargain.api.node.post.CompetitionPost;
-import com.somethinglurks.jbargain.scraper.node.meta.NodeVotersList;
+import com.somethinglurks.jbargain.scraper.node.meta.NodeVoterList;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
@@ -106,7 +106,7 @@ public class ScraperCompetitionPost extends ScraperPost implements CompetitionPo
             return null;
         }
 
-        return new NodeVotersList(getId(), user);
+        return new NodeVoterList(getId(), user);
     }
 
     @Override

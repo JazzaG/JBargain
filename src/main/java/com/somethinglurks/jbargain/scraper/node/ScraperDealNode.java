@@ -3,7 +3,7 @@ package com.somethinglurks.jbargain.scraper.node;
 import com.somethinglurks.jbargain.api.node.DealNode;
 import com.somethinglurks.jbargain.api.node.meta.*;
 import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
-import com.somethinglurks.jbargain.scraper.node.meta.NodeVotersList;
+import com.somethinglurks.jbargain.scraper.node.meta.NodeVoterList;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
@@ -116,7 +116,7 @@ public class ScraperDealNode extends ScraperNode implements DealNode {
             return null;
         }
 
-        return new NodeVotersList(id, user);
+        return new NodeVoterList(id, user);
     }
 
     @Override

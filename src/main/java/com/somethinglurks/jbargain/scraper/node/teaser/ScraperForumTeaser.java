@@ -5,7 +5,7 @@ import com.somethinglurks.jbargain.api.node.meta.Flag;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.teaser.ForumTeaser;
 import com.somethinglurks.jbargain.scraper.node.meta.AuthorElementAdapter;
-import com.somethinglurks.jbargain.scraper.node.meta.Flags;
+import com.somethinglurks.jbargain.scraper.node.meta.FlagList;
 import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
@@ -80,7 +80,7 @@ public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
 
     @Override
     public List<Flag> getFlags() {
-        return Flags.createFromElements(element.select("td.topic i"));
+        return new FlagList(element.select("td.topic i"));
     }
 
     @Override

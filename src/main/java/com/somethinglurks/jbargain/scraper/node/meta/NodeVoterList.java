@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class NodeVotersList extends ArrayList<Voter> {
+public class NodeVoterList extends ArrayList<Voter> {
 
-    public NodeVotersList(String nodeId, ScraperUser user) {
+    public NodeVoterList(String nodeId, ScraperUser user) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
         }
