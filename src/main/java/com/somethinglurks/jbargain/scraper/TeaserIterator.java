@@ -31,6 +31,9 @@ public class TeaserIterator implements Iterator<Teaser> {
     public TeaserIterator(Tag tag, ScraperUser user) {
         this.tag = tag;
         this.user = user;
+
+        // Fetch first page
+        fetchNextPage();
     }
 
     private boolean fetchNextPage() {
