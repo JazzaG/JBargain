@@ -63,7 +63,7 @@ public class ScraperPost implements Post {
 
     @Override
     public String getId() {
-        Matcher matcher = Pattern.compile("\\/([0-9]+)").matcher(element.baseUri());
+        Matcher matcher = Pattern.compile("/([0-9]+)").matcher(element.baseUri());
         matcher.find();
 
         return matcher.group(1);
