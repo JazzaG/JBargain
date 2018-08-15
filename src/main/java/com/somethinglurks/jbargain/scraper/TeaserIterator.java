@@ -111,7 +111,7 @@ public class TeaserIterator implements Iterator<Teaser> {
                     .parent() // <table>
                     .hasClass("forum-topics");
 
-            return new ScraperForumTeaser(element, user, withinCategory, tag);
+            return new ScraperForumTeaser(element, user, withinCategory);
         }
     }
 

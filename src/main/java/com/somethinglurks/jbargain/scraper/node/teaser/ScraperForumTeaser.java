@@ -10,20 +10,22 @@ import com.somethinglurks.jbargain.scraper.user.ScraperUser;
 import com.somethinglurks.jbargain.scraper.util.date.StringToDate;
 import com.somethinglurks.jbargain.scraper.util.integer.StringToInteger;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
 
     private boolean withinCategory;
     private Tag category;
 
-    public ScraperForumTeaser(Element element, ScraperUser user, boolean withinCategory, Tag category) {
+    public ScraperForumTeaser(Element element, ScraperUser user, boolean withinCategory) {
         super(element, user);
 
         this.withinCategory = withinCategory;
-        this.category = category;
     }
 
     @Override
@@ -70,7 +72,13 @@ public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
     @Override
     public Tag getCategory() {
         if (withinCategory) {
-            return category;
+            String text = element.ownerDocument().title();
+            text = text.substring(0, text.indexOf(":"));
+
+            Matcher endpointMatcher = Pattern.compile("(/forum/[0-9]+)").matcher(element.baseUri());
+            endpointMatcher.find();
+
+            return new Tag(text, endpointMatcher.group(1));
         } else {
             return new Tag(
                     element.select("td.forum a").text(),
@@ -88,7 +96,11 @@ public class ScraperForumTeaser extends ScraperTeaser implements ForumTeaser {
         if (element.selectFirst("td.replies") == null) {
             return 0;
         } else {
-            return StringToInteger.parseSelector(element, "td.replies");
+            // Remove the 'new' marker
+            Elements repliesElement = element.clone().select("td.replies");
+            repliesElement.select("span.marker").remove();
+
+            return StringToInteger.parseSelector(repliesElement.first(), "*");
         }
     }
 }

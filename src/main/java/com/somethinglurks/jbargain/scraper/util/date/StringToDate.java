@@ -62,7 +62,7 @@ public class StringToDate {
      */
     public static Date parseFormattedPostDate(String string, boolean includeTime) {
         // Grab date values from string
-        Pattern pattern = Pattern.compile("([0-9]{2}/[0-9]{2}/[0-9]{4} - [0-9]{2}:[0-9]{2})");
+        Pattern pattern = Pattern.compile("([0-9]{2}/[0-9]{2}/[0-9]{4})" + (includeTime ? "( - [0-9]{2}:[0-9]{2})" : ""));
         Matcher matcher = pattern.matcher(string);
 
         if (!matcher.find()) {
@@ -73,7 +73,7 @@ public class StringToDate {
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy" + (includeTime ? " - H:m" : ""));
 
         try {
-            return format.parse(matcher.group(1));
+            return format.parse(matcher.group(1) + (includeTime ? matcher.group(2) : ""));
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
