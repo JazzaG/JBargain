@@ -1,6 +1,7 @@
 package com.somethinglurks.jbargain.scraper;
 
 import com.somethinglurks.jbargain.api.JBargain;
+import com.somethinglurks.jbargain.api.Search;
 import com.somethinglurks.jbargain.api.node.meta.Tag;
 import com.somethinglurks.jbargain.api.node.post.Post;
 import com.somethinglurks.jbargain.api.node.teaser.Teaser;
@@ -113,5 +114,8 @@ public class ScraperJBargain implements JBargain {
         return new TeaserIterator(tag, (ScraperUser) user);
     }
 
-
+    @Override
+    public Search searchFor(String query) {
+        return null;
+    }
 }

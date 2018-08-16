@@ -62,4 +62,12 @@ public interface JBargain {
      */
     Iterator<Teaser> getTeasersByTag(Tag tag) throws IOException;
 
+    /**
+     * Creates a search from a query
+     *
+     * @param query Query string
+     * @return Search instance
+     */
+    Search searchFor(String query);
+
 }
