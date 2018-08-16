@@ -37,18 +37,23 @@ public class StringToDate {
      * @return Date object, or null if string did not contain a relative post date
      */
     public static Date parseRelativePostDate(String string) {
-        Matcher matcher = Pattern.compile("(?:([0-9]+) hour[s]? )?(?:([0-9]+) min)").matcher(string);
+        Matcher matcher = Pattern
+                .compile("(?:([0-9]+) hour[s]? )?(?:([0-9]+) min )?(?:([0-9]+) sec )?ago")
+                .matcher(string);
 
         if (!matcher.find()) {
             return null;
         }
 
-        int hoursAgo = matcher.group(1) == null ? 0 : Integer.parseInt(matcher.group(1)); // hours may not be present
-        int minutesAgo = Integer.parseInt(matcher.group(2));
+        // Use ternary as items may not be present
+        int hoursAgo = matcher.group(1) == null ? 0 : Integer.parseInt(matcher.group(1));
+        int minutesAgo = matcher.group(2) == null ? 0 : Integer.parseInt(matcher.group(2));
+        int secondsAgo = matcher.group(3) == null ? 0 : Integer.parseInt(matcher.group(3));
 
         long now = System.currentTimeMillis();
         now -= hoursAgo * (1000 * 60 * 60); // subtract hours in ms
         now -= minutesAgo * (1000 * 60); // subtract minutes in ms
+        now -= secondsAgo * (1000); // subtract seconds in ms
 
         return new Date(now);
     }
