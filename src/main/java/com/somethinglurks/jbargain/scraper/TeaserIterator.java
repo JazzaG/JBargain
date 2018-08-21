@@ -50,13 +50,10 @@ public class TeaserIterator implements Iterator<Teaser> {
             Element pageElement = connection.get();
             if ((teasers = pageElement.select(DEAL_SELECTOR)).size() > 0) {
                 factory = new DealFactory();
-//                factory = (ScraperDealTeaser::new);
             } else if ((teasers = pageElement.select(FORUM_SELECTOR)).size() > 0) {
                 factory = new ForumFactory();
-//                factory = (ScraperForumTeaser::new);
             } else if ((teasers = pageElement.select(COMP_SELECTOR)).size() > 0) {
                 factory = new CompetitionFactory();
-//                factory = (ScraperCompetitionTeaser::new);
             } else {
                 return false;
             }
