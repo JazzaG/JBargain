@@ -2,7 +2,7 @@ package com.somethinglurks.jbargain.scraper.util.integer;
 
 import org.jsoup.nodes.Element;
 
-public class StringToInteger {
+public final class StringToInteger {
 
     private StringToInteger() {
 

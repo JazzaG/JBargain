@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateBuilder {
+public final class DateBuilder {
 
     private String date;
     private String month;
