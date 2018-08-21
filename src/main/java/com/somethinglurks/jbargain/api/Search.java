@@ -8,7 +8,11 @@ public interface Search {
 
     Search sortBy(SortOption sortOption);
 
-    Search filterBy(Type type);
+    Search forumTopicOnly();
+
+    Search dealsOnly(boolean noExpired);
+
+    Search competitionsOnly();
 
     List<Teaser> getResults();
 
@@ -16,14 +20,6 @@ public interface Search {
         RELEVANCE,
         POST_DATE,
         LAST_COMMENT
-    }
-
-    enum Type {
-        CLASSIFIED,
-        COMPETITION,
-        DEALS,
-        DEALS_NO_EXPIRED,
-        FORUM_TOPICS
     }
 
 }
