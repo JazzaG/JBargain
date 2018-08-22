@@ -16,9 +16,9 @@ import java.util.Iterator;
 
 public class TeaserIterator implements Iterator<Teaser> {
 
-    private static final String DEAL_SELECTOR = "div.node-ozbdeal[class^=node]:not(.unpublished)";
+    private static final String DEAL_SELECTOR = "div.node-ozbdeal[id^=node]";
     private static final String FORUM_SELECTOR = "div#forum tbody tr";
-    private static final String COMP_SELECTOR = "div.node-competition[class^=node]";
+    private static final String COMP_SELECTOR = "div.node-competition[id^=node]";
 
     private Tag tag;
     private ScraperUser user;
