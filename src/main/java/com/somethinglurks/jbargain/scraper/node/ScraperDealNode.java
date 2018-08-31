@@ -94,7 +94,7 @@ public class ScraperDealNode extends ScraperNode implements DealNode {
 
     @Override
     public String getThumbnailUrl() {
-        return element.select("div.foxshot-conainer img").attr("src");
+        return element.select("div.foxshot-container img").attr("src");
     }
 
     @Override
